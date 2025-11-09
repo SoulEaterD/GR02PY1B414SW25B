@@ -12,6 +12,28 @@ public class Curso {
     private List<Material> material;
     private List<Evaluacion> evaluacion;
 
+    public Material crearMaterial(int id, String titulo, String tipo, String url) {
+        if (material == null) {
+            material = new ArrayList<>();
+        }
+        Material mat = new Material (1, "Material de prueba", "Contenido de prueba", "www.google.com");
+        material.add(mat);
+        return mat;
+    }
+
+    public void mostrarMaterial(){
+        if (material == null) {
+            System.out.println("No hay material disponible.");
+        }else{
+            for (Material mat : material) {
+                System.out.println("ID Material: "+ mat.getIdMaterial());
+                System.out.println("Título: "+ mat.getTitulo());
+                System.out.println("Contenido: "+ mat.getTipo());
+                System.out.println("Enlace: "+ mat.getUrl());
+            }
+        }
+    }
+
     public Evaluacion elegirEvaluacion(Estudiante estudiante) {
         mostrarEvaluacionesDisponibles();
         Evaluacion ev = getEvaluacion().get(0);
