@@ -7,6 +7,20 @@ public class Evaluacion {
     private List<Pregunta> preguntas;
     private double calificacion;
 
+
+    public Evaluacion rendirEvaluacion() {
+        int respuestasCorrectas = 0;
+        for (Pregunta pregunta : preguntas) {
+            String respuestaEstudiante = "Opción D"; // Simulación de respuesta
+            if (respuestaEstudiante.equals(pregunta.getRespuestaCorrecta())) {
+                respuestasCorrectas++;
+            }
+        }
+        calificacion = ((double) respuestasCorrectas / preguntas.size()) * 100;
+        System.out.println("Calificación obtenida: " + calificacion);
+        return this;
+    }
+
     public Evaluacion(String titulo, List<Pregunta> preguntas, double calificacion) {
         this.titulo = titulo;
         this.preguntas = preguntas;

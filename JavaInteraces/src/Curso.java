@@ -12,6 +12,14 @@ public class Curso {
     private List<Material> material;
     private List<Evaluacion> evaluacion;
 
+    public Evaluacion elegirEvaluacion(Estudiante estudiante) {
+        mostrarEvaluacionesDisponibles();
+        Evaluacion ev = getEvaluacion().get(0);
+        ev.rendirEvaluacion();
+        estudiante.asignarNotaRegistro(ev);
+        estudiante.getEvaluacionesRealizadas().add(ev);
+        return ev;
+    }
     public Evaluacion crearEvaluacion(String titulo, List<Pregunta> preguntas) {
         if (evaluacion ==null) {
             evaluacion = new ArrayList<>();

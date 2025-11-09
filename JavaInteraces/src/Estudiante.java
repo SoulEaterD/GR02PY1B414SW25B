@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Estudiante {
@@ -8,6 +9,18 @@ public class Estudiante {
     private String contraseniaEstudiante;
     private boolean permisosEstudiante;
     private List<Curso> cursosEstudiante;
+    private RegistroNotas notasEstudiante;
+    private List<Evaluacion> evaluacionesRealizadas;
+
+    public void asignarNotaRegistro(Evaluacion evaluacion) {
+        if (notasEstudiante == null && evaluacionesRealizadas == null) {
+            notasEstudiante = new RegistroNotas(null);
+            notasEstudiante.registrarEvaluacion(evaluacion);
+            evaluacionesRealizadas =  new ArrayList<>();
+        }else{
+            notasEstudiante.registrarEvaluacion(evaluacion);
+        }
+    }
 
     public Estudiante(String nombreEstudiante, int idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
         this.nombreEstudiante = nombreEstudiante;
@@ -65,5 +78,23 @@ public class Estudiante {
     public void setCursosEstudiante(List<Curso> cursosEstudiante) {
         this.cursosEstudiante = cursosEstudiante;
     }
+
+    public RegistroNotas getNotasEstudiante() {
+        return notasEstudiante;
+    }
+
+    public void setNotasEstudiante(RegistroNotas notasEstudiante) {
+        this.notasEstudiante = notasEstudiante;
+    }
+
+    public List<Evaluacion> getEvaluacionesRealizadas() {
+        return evaluacionesRealizadas;
+    }
+
+    public void setEvaluacionesRealizadas(List<Evaluacion> evaluacionesRealizadas) {
+        this.evaluacionesRealizadas = evaluacionesRealizadas;
+    }
+
+    
         
 }
