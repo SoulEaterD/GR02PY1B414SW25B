@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Curso {
@@ -10,7 +11,29 @@ public class Curso {
     private List<Estudiante> estudiantes;
     private List<Material> material;
     private List<Evaluacion> evaluacion;
-    
+
+    public Evaluacion crearEvaluacion(String titulo, List<Pregunta> preguntas) {
+        if (evaluacion ==null) {
+            evaluacion = new ArrayList<>();
+        }
+        Evaluacion evaluacionC = new Evaluacion(titulo, null, 0);
+        evaluacionC.setPreguntas(evaluacionC.crearPreguntas(2));
+        evaluacion.add(evaluacionC);
+        return evaluacionC;
+    }
+    public void mostrarEvaluacionesDisponibles() {
+        if (evaluacion != null) {
+            int numeroEvaluaciones = 1;
+            for (Evaluacion eval : evaluacion) {
+                System.out.println(numeroEvaluaciones+"Título: " + eval.getTitulo());
+                System.out.println(eval.getPreguntas().size() + " preguntas disponibles.");
+                System.out.println(eval.getPreguntas().get(0).getOpciones().size() + " opciones por pregunta.");
+                numeroEvaluaciones++;
+            }
+        } else {
+            System.out.println("No hay evaluaciones disponibles.");
+        }
+    }
     public Curso(int idCurso, String nombreCurso, String descripcionCurso, Docente docente,
             List<Inscripcion> inscripcion, List<Estudiante> estudiantes, List<Material> material,
             List<Evaluacion> evaluacion) {
