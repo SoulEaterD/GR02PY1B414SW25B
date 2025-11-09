@@ -1,6 +1,7 @@
 import java.util.List;
 
 public class Pregunta {
+
     private int idPregunta;
     private String enunciado;
     private String respuestaCorrecta;
@@ -16,24 +17,31 @@ public class Pregunta {
     public int getIdPregunta() {
         return idPregunta;
     }
+
     public void setIdPregunta(int idPregunta) {
         this.idPregunta = idPregunta;
     }
+
     public String getEnunciado() {
         return enunciado;
     }
+
     public void setEnunciado(String enunciado) {
         this.enunciado = enunciado;
     }
+
     public String getRespuestaCorrecta() {
         return respuestaCorrecta;
     }
+
     public void setRespuestaCorrecta(String respuestaCorrecta) {
         this.respuestaCorrecta = respuestaCorrecta;
     }
+
     public List<String> getOpciones() {
         return opciones;
     }
+    
     public void setOpciones(List<String> opciones) {
         this.opciones = opciones;
     }

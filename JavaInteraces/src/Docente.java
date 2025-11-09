@@ -1,54 +1,69 @@
-public class Docente {
-    private String nombre;
-    private int idDocente;
-    private String correo;
-    private String contrasenia;
-    private String especialidad;
-    private boolean permisos;
+import java.util.List;
 
-    public Docente(String nombre, int idDocente, String correo, String contrasenia, String especialidad,
-            boolean permisos) {
-        this.nombre = nombre;
+public class Docente {
+    
+    private int idDocente;
+    private String nombreDocente;
+    private String correoDocente;
+    private String contraseniaDocente;
+    private boolean permisosDocente;
+    private List<Curso> cursosDocente;
+
+    public Docente(String nombreDocente, int idDocente, String correoDocente, String contraseniaDocente, boolean permisosDocente, List<Curso> cursosDocente) {
+        this.nombreDocente = nombreDocente;
         this.idDocente = idDocente;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
-        this.especialidad = especialidad;
-        this.permisos = permisos;
+        this.correoDocente = correoDocente;
+        this.contraseniaDocente = contraseniaDocente;
+        this.permisosDocente = permisosDocente;
+        this.cursosDocente = cursosDocente;
     }
-    public String getNombre() {
-        return nombre;
+
+    public String getNombreDocente() {
+        return nombreDocente;
     }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    public void setNombreDocente(String nombre) {
+        this.nombreDocente = nombre;
     }
+
     public int getIdDocente() {
         return idDocente;
     }
+
     public void setIdDocente(int idDocente) {
         this.idDocente = idDocente;
     }
-    public String getCorreo() {
-        return correo;
+
+    public String getCorreoDocente() {
+        return correoDocente;
     }
-    public void setCorreo(String correo) {
-        this.correo = correo;
+
+    public void setCorreoDocente(String correo) {
+        this.correoDocente = correo;
     }
-    public String getContrasenia() {
-        return contrasenia;
+
+    public String getContraseniaDocente() {
+        return contraseniaDocente;
     }
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
+
+    public void setContraseniaDocente(String contrasenia) {
+        this.contraseniaDocente = contrasenia;
     }
-    public String getEspecialidad() {
-        return especialidad;
+    
+    public boolean isPermisosDocente() {
+        return permisosDocente;
     }
-    public void setEspecialidad(String especialidad) {
-        this.especialidad = especialidad;
+
+    public void setPermisosDocente(boolean permisos) {
+        this.permisosDocente = permisos;
     }
-    public boolean isPermisos() {
-        return permisos;
+
+    public List<Curso> getCursos() {
+        return cursosDocente;
     }
-    public void setPermisos(boolean permisos) {
-        this.permisos = permisos;
+
+    public void setCursos(List<Curso> cursosDocente) {
+        this.cursosDocente = cursosDocente;
     }
+
 }

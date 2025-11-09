@@ -1,42 +1,69 @@
-public class Estudiante {
-    private String nombre;
-    private int idEstudiante;
-    private String correo;
-    private String contrasenia;
-    private boolean permisos;
+import java.util.List;
 
-    public Estudiante(String nombre, int idEstudiante, String correo, String contrasenia) {
-        this.nombre = nombre;
+public class Estudiante {
+
+    private String nombreEstudiante;
+    private int idEstudiante;
+    private String correoEstudiante;
+    private String contraseniaEstudiante;
+    private boolean permisosEstudiante;
+    private List<Curso> cursosEstudiante;
+
+    public Estudiante(String nombreEstudiante, int idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
+        this.nombreEstudiante = nombreEstudiante;
         this.idEstudiante = idEstudiante;
-        this.correo = correo;
-        this.contrasenia = contrasenia;
-        this.permisos = false;
+        this.correoEstudiante = correoEstudiante;
+        this.contraseniaEstudiante = contraseniaEstudiante;
+        this.permisosEstudiante = false;
+        this.cursosEstudiante = cursosEstudiante;
     }
-    public String getNombre() {
-        return nombre;
+    
+    public String getNombreEstudiante() {
+        return nombreEstudiante;
     }
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+
+    public void setNombreEstudiante(String nombreEstudiante) {
+        this.nombreEstudiante = nombreEstudiante;
     }
+
     public int getIdEstudiante() {
         return idEstudiante;
     }
+
     public void setIdEstudiante(int idEstudiante) {
         this.idEstudiante = idEstudiante;
     }
-    public String getCorreo() {
-        return correo;
+
+    public String getCorreoEstudiante() {
+        return correoEstudiante;
     }
-    public void setCorreo(String correo) {
-        this.correo = correo;
+
+    public void setCorreoEstudiante(String correoEstudiante) {
+        this.correoEstudiante = correoEstudiante;
     }
-    public String getContrasenia() {
-        return contrasenia;
+
+    public String getContraseniaEstudiante() {
+        return contraseniaEstudiante;
     }
-    public void setContrasenia(String contrasenia) {
-        this.contrasenia = contrasenia;
+
+    public void setContraseniaEstudiante(String contraseniaEstudiante) {
+        this.contraseniaEstudiante = contraseniaEstudiante;
     }
-    public boolean isPermisos() {
-        return permisos;
+
+    public boolean isPermisosEstudiante() {
+        return permisosEstudiante;
     }
+
+    public List<Curso> getCursosEstudiante() {
+        return cursosEstudiante;
+    }
+
+    public void setPermisosEstudiante(boolean permisosEstudiante) {
+        this.permisosEstudiante = permisosEstudiante;
+    }
+
+    public void setCursosEstudiante(List<Curso> cursosEstudiante) {
+        this.cursosEstudiante = cursosEstudiante;
+    }
+        
 }
