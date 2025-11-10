@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Docente {
@@ -11,39 +10,6 @@ public class Docente {
     private List<Curso> cursosDocente;
 
     //los metodos se van a implementar conjuntamente la interfaz 
-    private List<Curso> cursosCreados;
-    public Docente(int idDocente, String nombreDocente, String correoDocente, String contraseniaDocente,
-            boolean permisosDocente, List<Curso> cursosDocente, List<Curso> cursosCreados) {
-        this.idDocente = idDocente;
-        this.nombreDocente = nombreDocente;
-        this.correoDocente = correoDocente;
-        this.contraseniaDocente = contraseniaDocente;
-        this.permisosDocente = permisosDocente;
-        this.cursosDocente = cursosDocente;
-        this.cursosCreados = cursosCreados;
-    }
-
-    public void crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente, List<Inscripcion> inscripcion, List<Estudiante> estudiantes, List<Material> material, List<Evaluacion> evaluacion){
-        if (cursosCreados == null) {
-            cursosCreados = new ArrayList<>();
-        }
-        Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente, inscripcion, estudiantes, material, evaluacion);
-        cursosCreados.add(c1);
-    }
-
-    public Curso seleccionarCurso(Estudiante estudiante){
-        Curso c1 = cursosCreados.get(0);
-        c1.solicitarInscripcion(estudiante);
-        return c1;
-    }
-
-    public List<Curso> getCursosCreados() {
-        return cursosCreados;
-    }
-
-    public void setCursosCreados(List<Curso> cursosCreados) {
-        this.cursosCreados = cursosCreados;
-    }
 
     public Docente(String nombreDocente, int idDocente, String correoDocente, String contraseniaDocente, boolean permisosDocente, List<Curso> cursosDocente) {
         this.nombreDocente = nombreDocente;
