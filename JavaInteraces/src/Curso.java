@@ -12,6 +12,7 @@ public class Curso {
     private List<Material> material;
     private List<Evaluacion> evaluacion;
 
+
     public Material crearMaterial(int id, String titulo, String tipo, String url) {
         if (material == null) {
             material = new ArrayList<>();
@@ -20,6 +21,22 @@ public class Curso {
         material.add(mat);
         return mat;
     }
+
+
+    public Inscripcion solicitarInscripcion(Estudiante estudiante){
+       if (inscripcion==null && estudiantes==null){
+            inscripcion = new ArrayList<>();
+            estudiantes = new ArrayList<>();
+        }
+        Inscripcion in1 = new Inscripcion(idCurso, descripcionCurso, estudiante, this);
+        inscripcion.add(in1);
+        estudiantes.add(in1.getEstudiante());
+        estudiante.guardarCurso(this);
+        return in1;
+    }
+    
+
+
 
     public void mostrarMaterial(){
         if (material == null) {

@@ -22,6 +22,13 @@ public class Estudiante {
         }
     }
 
+    public void guardarCurso(Curso curso){
+        if(cursosEstudiante==null){
+            cursosEstudiante = new ArrayList<>();
+        }
+        cursosEstudiante.add(curso);
+    }
+
     public Estudiante(String nombreEstudiante, int idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
         this.nombreEstudiante = nombreEstudiante;
         this.idEstudiante = idEstudiante;

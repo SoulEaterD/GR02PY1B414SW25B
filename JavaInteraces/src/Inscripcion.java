@@ -1,3 +1,5 @@
+
+
 public class Inscripcion {
 
     private int idInscripcion;
