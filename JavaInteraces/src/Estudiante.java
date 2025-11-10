@@ -4,7 +4,7 @@ import java.util.List;
 public class Estudiante {
 
     private String nombreEstudiante;
-    private int idEstudiante;
+    private String idEstudiante;
     private String correoEstudiante;
     private String contraseniaEstudiante;
     private boolean permisosEstudiante;
@@ -29,7 +29,7 @@ public class Estudiante {
         cursosEstudiante.add(curso);
     }
 
-    public Estudiante(String nombreEstudiante, int idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
+    public Estudiante(String nombreEstudiante, String idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
         this.nombreEstudiante = nombreEstudiante;
         this.idEstudiante = idEstudiante;
         this.correoEstudiante = correoEstudiante;
@@ -46,11 +46,11 @@ public class Estudiante {
         this.nombreEstudiante = nombreEstudiante;
     }
 
-    public int getIdEstudiante() {
+    public String getIdEstudiante() {
         return idEstudiante;
     }
 
-    public void setIdEstudiante(int idEstudiante) {
+    public void setIdEstudiante(String idEstudiante) {
         this.idEstudiante = idEstudiante;
     }
 
@@ -102,6 +102,5 @@ public class Estudiante {
         this.evaluacionesRealizadas = evaluacionesRealizadas;
     }
 
-    
         
 }

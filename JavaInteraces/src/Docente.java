@@ -2,7 +2,7 @@ import java.util.List;
 
 public class Docente {
     
-    private int idDocente;
+    private String idDocente;
     private String nombreDocente;
     private String correoDocente;
     private String contraseniaDocente;
@@ -11,7 +11,7 @@ public class Docente {
 
     //los metodos se van a implementar conjuntamente la interfaz 
 
-    public Docente(String nombreDocente, int idDocente, String correoDocente, String contraseniaDocente, boolean permisosDocente, List<Curso> cursosDocente) {
+    public Docente(String nombreDocente, String idDocente, String correoDocente, String contraseniaDocente, boolean permisosDocente, List<Curso> cursosDocente) {
         this.nombreDocente = nombreDocente;
         this.idDocente = idDocente;
         this.correoDocente = correoDocente;
@@ -28,11 +28,11 @@ public class Docente {
         this.nombreDocente = nombre;
     }
 
-    public int getIdDocente() {
+    public String getIdDocente() {
         return idDocente;
     }
 
-    public void setIdDocente(int idDocente) {
+    public void setIdDocente(String idDocente) {
         this.idDocente = idDocente;
     }
 

@@ -8,7 +8,11 @@ public class Main extends JFrame {
     private CardLayout layout;
     private JPanel contenedor;
 
+    String usuario;
+    String contrasena;
+
     private List<Curso> cursosCreados = new ArrayList<>();
+    private Estudiante e1 = new Estudiante("Juan", "20252", "juan@patito.com", "123", null); 
 
     public Curso crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente, List<Inscripcion> inscripcion, List<Estudiante> estudiantes, List<Material> material, List<Evaluacion> evaluacion){
         Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente, inscripcion, estudiantes, material, evaluacion);
@@ -23,6 +27,7 @@ public class Main extends JFrame {
     }
 
     public Main() {
+
         super("Aula Virtual");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -43,6 +48,7 @@ public class Main extends JFrame {
 
     //PANTALLA LOGIN
     private JPanel crearPantallaLogin() {
+
         JPanel panelSesion = new JPanel(new GridBagLayout());
         panelSesion.setBackground(new Color(74, 85, 110));
         panelSesion.setBorder(BorderFactory.createEmptyBorder(30, 80, 30, 80));
@@ -113,8 +119,8 @@ public class Main extends JFrame {
         fondo.add(panelSesion);
 
         btnIngresar.addActionListener(e -> {
-            String usuario = txtUsuario.getText();
-            String contrasena = new String(txtContrasena.getPassword());
+            usuario = txtUsuario.getText();
+            contrasena = new String(txtContrasena.getPassword());
 
             if (usuario.equals("Jorge") && contrasena.equals("123")) {
                 layout.show(contenedor, "aulaDocente");
@@ -267,6 +273,7 @@ public class Main extends JFrame {
 
     //PAGINA DEL CURSO
     private void mostrarPaginaCurso(Curso curso) {
+
         JPanel panelCurso = new JPanel(new BorderLayout());
         panelCurso.setBackground(new Color(45, 55, 72));
 
@@ -298,7 +305,13 @@ public class Main extends JFrame {
         btnVolver.setForeground(Color.WHITE);
         btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnVolver.setFocusPainted(false);
-        btnVolver.addActionListener(e -> layout.show(contenedor, "aulaDocente"));
+        btnVolver.addActionListener(e -> {
+            if(usuario.equals("Jorge")) {
+                layout.show(contenedor, "aulaDocente");
+            } else if (usuario.equals("Guille")) {
+                layout.show(contenedor, "aulaEstudiante");
+            }
+        });
         panelCurso.add(btnVolver, BorderLayout.SOUTH);
 
         contenedor.add(panelCurso, "paginaCurso_" + curso.getIdCurso());
