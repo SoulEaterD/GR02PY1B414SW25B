@@ -311,7 +311,7 @@ public class Main extends JFrame {
 
             btn.addActionListener(ev -> {
                 if (opcion.equals("Materiales")) {
-                    mostrarPanelMateriales(curso, true);
+                    mostrarPanelMateriales(curso);
                 } else if (opcion.equals("Tareas")) {
                     JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
                 } else if (opcion.equals("Registro de Notas")) {
@@ -343,7 +343,7 @@ public class Main extends JFrame {
     }
 
     // PANEL DE MATERIALES
-    private void mostrarPanelMateriales(Curso curso, boolean esDocente) {
+    private void mostrarPanelMateriales(Curso curso) {
 
         JPanel panelMateriales = new JPanel(new BorderLayout());
         panelMateriales.setBackground(new Color(45, 55, 72));
@@ -401,7 +401,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (esDocente) {
+        if (usuario == docente.getCorreo()) {
             JButton btnAgregar = new JButton("Crear material");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);

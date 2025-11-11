@@ -9,7 +9,6 @@ public class Curso {
     private Docente docente;
     private List<Estudiante> estudiantes;
     private List<Material> material;
-    private List<Evaluacion> evaluacion;
     private List<Tarea> tareas;
     private RegistroNotas rNotas;
 
@@ -54,7 +53,6 @@ public class Curso {
         this.docente = docente;
         this.estudiantes = new ArrayList<>();
         this.material = new ArrayList<>();
-        this.evaluacion = new ArrayList<>();
     }
 
     public int getIdCurso() {
@@ -103,14 +101,6 @@ public class Curso {
 
     public void setMaterial(List<Material> material) {
         this.material = material;
-    }
-
-    public List<Evaluacion> getEvaluacion() {
-        return evaluacion;
-    }
-
-    public void setEvaluacion(List<Evaluacion> evaluacione) {
-        this.evaluacion = evaluacione;
     }
 
     public RegistroNotas getrNotas() {
