@@ -5,8 +5,8 @@ public class Docente extends Usuario {
     
     private List<Curso> cursosDocente;
 
-    public Docente(String id, String correo, String contrasenia, boolean permisos) {
-        super(id, correo, contrasenia, permisos);
+    public Docente(String id, String correo, String contrasenia) {
+        super(id, correo, contrasenia, true);
         this.cursosDocente = new ArrayList<>();
     }
 

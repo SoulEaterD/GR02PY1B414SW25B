@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends JFrame {
 
@@ -9,20 +8,14 @@ public class Main extends JFrame {
     private JPanel contenedor;
 
     String usuario;
-    String contrasena;
 
-    private List<Curso> cursosCreados = new ArrayList<>();
-    private Estudiante e1 = new Estudiante("Juan", "20252", "juan@patito.com", "123", null);
-
-    public Curso crearCurso(int idCurso, String nombreCurso, String descripcionCurso, Docente docente,
-                            List<Inscripcion> inscripcion, List<Estudiante> estudiantes,
-                            List<Material> material, List<Evaluacion> evaluacion) {
-        Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente, inscripcion, estudiantes, material, evaluacion);
-        cursosCreados.add(c1);
-        return c1;
-    }
-
+    private Docente docente = new Docente("1", "docente@docente.com", "123");
+    private Estudiante e1 = new Estudiante("1", "juan@patito.com", "123");
+    private Estudiante e2 = new Estudiante("2", "maria@patito.com", "123");
+    private AulaVirtual aulaVirtual = new AulaVirtual(docente);
+    
     public Main() {
+
         super("Aula Virtual");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -30,6 +23,8 @@ public class Main extends JFrame {
 
         layout = new CardLayout();
         contenedor = new JPanel(layout);
+        aulaVirtual.getEstudiantesRegistrados().add(e1);
+        aulaVirtual.getEstudiantesRegistrados().add(e2);
 
         JPanel pantallaLogin = crearPantallaLogin();
         JPanel pantallaAulaDocente = crearPantallaAulaDocente();
@@ -41,10 +36,9 @@ public class Main extends JFrame {
         setVisible(true);
     }
 
-    // -------------------------------
     // LOGIN
-    // -------------------------------
     private JPanel crearPantallaLogin() {
+
         JPanel panelSesion = new JPanel(new GridBagLayout());
         panelSesion.setBackground(new Color(74, 85, 110));
         panelSesion.setBorder(BorderFactory.createEmptyBorder(30, 80, 30, 80));
@@ -110,27 +104,37 @@ public class Main extends JFrame {
         fondo.add(panelSesion);
 
         btnIngresar.addActionListener(e -> {
-            usuario = txtUsuario.getText();
-            contrasena = new String(txtContrasena.getPassword());
 
-            if (usuario.equals("Jorge") && contrasena.equals("123")) {
+            usuario = txtUsuario.getText();
+            String contrasena = new String(txtContrasena.getPassword());
+            boolean encontrado = false;
+
+            if(usuario.equals(docente.getCorreo()) && contrasena.equals(docente.getContrasenia())) {
                 layout.show(contenedor, "aulaDocente");
-            } else if (usuario.equals("Guille") && contrasena.equals("123")) {
-                JPanel pantallaEstudiante = crearPantallaAulaEstudiante();
-                contenedor.add(pantallaEstudiante, "aulaEstudiante");
-                layout.show(contenedor, "aulaEstudiante");
+                encontrado = true;
             } else {
-                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+                for(int i = 0; i < aulaVirtual.estudiantesRegistrados.size(); i++) {
+                    if(usuario.equals(aulaVirtual.estudiantesRegistrados.get(i).getCorreo()) && contrasena.equals(aulaVirtual.estudiantesRegistrados.get(i).getContrasenia())) {
+                        JPanel pantallaEstudiante = crearPantallaAulaEstudiante(aulaVirtual.estudiantesRegistrados.get(i));
+                        contenedor.add(pantallaEstudiante, "aulaEstudiante");
+                        layout.show(contenedor, "aulaEstudiante");
+                        encontrado = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!encontrado) {
+                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
             }
         });
 
         return fondo;
     }
 
-    // -------------------------------
     // AULA DOCENTE
-    // -------------------------------
     private JPanel crearPantallaAulaDocente() {
+
         JPanel panelAula = new JPanel(new BorderLayout());
         panelAula.setBackground(new Color(45, 55, 72));
 
@@ -175,9 +179,16 @@ public class Main extends JFrame {
         panelAula.add(scroll, BorderLayout.CENTER);
 
         btnCrearCurso.addActionListener(e -> {
+
             String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del curso:");
             if (nombre != null && !nombre.trim().isEmpty()) {
-                Curso nuevoCurso = crearCurso(cursosCreados.size() + 1, nombre, null, null, null, null, new ArrayList<>(), null);
+
+                Curso nuevoCurso = aulaVirtual.crearCurso(aulaVirtual.getCursosDisponibles().size() + 1, nombre, "", docente);
+
+                for(Estudiante registrado : aulaVirtual.getEstudiantesRegistrados()) {
+                    registrado.guardarCurso(nuevoCurso);
+                }
+
                 JButton btnCurso = new JButton(nombre);
                 btnCurso.setAlignmentX(Component.CENTER_ALIGNMENT);
                 btnCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
@@ -197,10 +208,9 @@ public class Main extends JFrame {
         return panelAula;
     }
 
-    // -------------------------------
     // AULA ESTUDIANTE
-    // -------------------------------
-    private JPanel crearPantallaAulaEstudiante() {
+    private JPanel crearPantallaAulaEstudiante(Estudiante estudiante) {
+
         JPanel panelEstudiante = new JPanel(new BorderLayout());
         panelEstudiante.setBackground(new Color(45, 55, 72));
 
@@ -232,7 +242,8 @@ public class Main extends JFrame {
         panelCursos.setBackground(new Color(45, 55, 72));
         panelCursos.setBorder(BorderFactory.createEmptyBorder(30, 200, 30, 200));
 
-        for (Curso curso : cursosCreados) {
+        for (Curso curso : estudiante.getCursosEstudiante()) {
+
             JButton btnCurso = new JButton(curso.getNombreCurso());
             btnCurso.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
@@ -240,6 +251,7 @@ public class Main extends JFrame {
             btnCurso.setBackground(new Color(96, 107, 134));
             btnCurso.setForeground(Color.WHITE);
             btnCurso.setFocusPainted(false);
+
             btnCurso.addActionListener(ev -> mostrarPaginaCurso(curso));
 
             panelCursos.add(Box.createVerticalStrut(15));
@@ -257,10 +269,9 @@ public class Main extends JFrame {
         return panelEstudiante;
     }
 
-    // -------------------------------
-    // PÁGINA DEL CURSO
-    // -------------------------------
+    // PAGINA DEL CURSO
     private void mostrarPaginaCurso(Curso curso) {
+
         JPanel panelCurso = new JPanel(new BorderLayout());
         panelCurso.setBackground(new Color(45, 55, 72));
 
@@ -274,8 +285,9 @@ public class Main extends JFrame {
         panelOpciones.setBackground(new Color(45, 55, 72));
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(220, 220, 220, 220));
 
-            String[] opciones = {"Materiales", "Evaluaciones", "Registro de Notas"};
-    for (String opcion : opciones) {
+        String[] opciones = {"Materiales", "Evaluaciones", "Registro de Notas"};
+
+        for (String opcion : opciones) {
         JButton btn = new JButton(opcion);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 20));
         btn.setForeground(Color.WHITE);
@@ -284,11 +296,9 @@ public class Main extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // 🔹 Acción para cada botón
         btn.addActionListener(ev -> {
             if (opcion.equals("Materiales")) {
-                // 👉 Aquí abrimos el panel de materiales
-                mostrarPanelMateriales(curso, true); // true = usuario docente
+                mostrarPanelMateriales(curso, true);
             } else if (opcion.equals("Evaluaciones")) {
                 JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
             } else if (opcion.equals("Registro de Notas")) {
@@ -296,10 +306,10 @@ public class Main extends JFrame {
             }
         });
 
-        panelOpciones.add(btn);
-    }
+            panelOpciones.add(btn);
+        }
 
-    panelCurso.add(panelOpciones, BorderLayout.CENTER);
+        panelCurso.add(panelOpciones, BorderLayout.CENTER);
 
         JButton btnVolver = new JButton("Volver");
         btnVolver.setBackground(new Color(237, 87, 97));
@@ -307,90 +317,90 @@ public class Main extends JFrame {
         btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnVolver.setFocusPainted(false);
         btnVolver.addActionListener(e -> {
-            if (usuario.equals("Jorge")) layout.show(contenedor, "aulaDocente");
+            if (usuario.equals(docente.getCorreo())) layout.show(contenedor, "aulaDocente");
             else layout.show(contenedor, "aulaEstudiante");
         });
+
         panelCurso.add(btnVolver, BorderLayout.SOUTH);
 
         contenedor.add(panelCurso, "paginaCurso_" + curso.getIdCurso());
         layout.show(contenedor, "paginaCurso_" + curso.getIdCurso());
     }
 
-    // -------------------------------
     // PANEL DE MATERIALES
-    // -------------------------------
     private void mostrarPanelMateriales(Curso curso, boolean esDocente) {
-    JPanel panelMateriales = new JPanel(new BorderLayout());
-    panelMateriales.setBackground(new Color(45, 55, 72));
 
-    JLabel lblTitulo = new JLabel("Materiales del curso: " + curso.getNombreCurso(), SwingConstants.CENTER);
-    lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-    lblTitulo.setForeground(Color.WHITE);
-    lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-    panelMateriales.add(lblTitulo, BorderLayout.NORTH);
+        JPanel panelMateriales = new JPanel(new BorderLayout());
+        panelMateriales.setBackground(new Color(45, 55, 72));
 
-    JPanel listaPanel = new JPanel();
-    listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
-    listaPanel.setBackground(new Color(45, 55, 72));
+        JLabel lblTitulo = new JLabel("Materiales del curso: " + curso.getNombreCurso(), SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        panelMateriales.add(lblTitulo, BorderLayout.NORTH);
 
-    JScrollPane scroll = new JScrollPane(listaPanel);
-    scroll.setBorder(null);
-    scroll.getViewport().setBackground(new Color(45, 55, 72));
-    panelMateriales.add(scroll, BorderLayout.CENTER);
+        JPanel listaPanel = new JPanel();
+        listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
+        listaPanel.setBackground(new Color(45, 55, 72));
 
-    Runnable refrescarLista = () -> {
-        listaPanel.removeAll();
-        if (curso.getMaterial() != null && !curso.getMaterial().isEmpty()) {
-            for (Material m : curso.getMaterial()) {
-                JPanel item = new JPanel(new BorderLayout());
-                item.setBackground(new Color(74, 85, 110));
-                item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        JScrollPane scroll = new JScrollPane(listaPanel);
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(new Color(45, 55, 72));
+        panelMateriales.add(scroll, BorderLayout.CENTER);
 
-                JLabel lblMat = new JLabel("<html><b>" + m.getTitulo() + "</b> (" + m.getTipo() + ")<br><font color='#CCCCCC'>" + m.getUrl() + "</font></html>");
-                lblMat.setForeground(Color.WHITE);
-                item.add(lblMat, BorderLayout.CENTER);
+        Runnable refrescarLista = () -> {
+            listaPanel.removeAll();
+            if (curso.getMaterial() != null && !curso.getMaterial().isEmpty()) {
+                for (Material m : curso.getMaterial()) {
+                    JPanel item = new JPanel(new BorderLayout());
+                    item.setBackground(new Color(74, 85, 110));
+                    item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-                listaPanel.add(Box.createVerticalStrut(10));
-                listaPanel.add(item);
+                    JLabel lblMat = new JLabel("<html><b>" + m.getTitulo() + "</b> (" + m.getTipo() + ")<br><font color='#CCCCCC'>" + m.getUrl() + "</font></html>");
+                    lblMat.setForeground(Color.WHITE);
+                    item.add(lblMat, BorderLayout.CENTER);
+
+                    listaPanel.add(Box.createVerticalStrut(10));
+                    listaPanel.add(item);
+                }
+            } else {
+                JLabel lblVacio = new JLabel("No hay materiales disponibles.", SwingConstants.CENTER);
+                lblVacio.setForeground(Color.LIGHT_GRAY);
+                lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                listaPanel.add(lblVacio);
             }
-        } else {
-            JLabel lblVacio = new JLabel("No hay materiales disponibles.", SwingConstants.CENTER);
-            lblVacio.setForeground(Color.LIGHT_GRAY);
-            lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            listaPanel.add(lblVacio);
-        }
-        listaPanel.revalidate();
-        listaPanel.repaint();
-    };
-    refrescarLista.run();
+            listaPanel.revalidate();
+            listaPanel.repaint();
+        };
+        refrescarLista.run();
 
-    JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
-    panelBotones.setBackground(new Color(45, 55, 72));
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        panelBotones.setBackground(new Color(45, 55, 72));
 
-    JButton btnVolver = new JButton("Volver");
-    btnVolver.setBackground(new Color(237, 87, 97));
-    btnVolver.setForeground(Color.WHITE);
-    btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
-    btnVolver.setFocusPainted(false);
-    btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
-    panelBotones.add(btnVolver);
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(237, 87, 97));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnVolver.setFocusPainted(false);
+        btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
+        panelBotones.add(btnVolver);
 
-    if (esDocente) {
-        JButton btnAgregar = new JButton("Crear material");
-        btnAgregar.setBackground(new Color(96, 107, 134));
-        btnAgregar.setForeground(Color.WHITE);
-        btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnAgregar.setFocusPainted(false);
+        if (esDocente) {
+            JButton btnAgregar = new JButton("Crear material");
+            btnAgregar.setBackground(new Color(96, 107, 134));
+            btnAgregar.setForeground(Color.WHITE);
+            btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            btnAgregar.setFocusPainted(false);
 
-        btnAgregar.addActionListener(e -> {
-            String titulo = JOptionPane.showInputDialog(this, "Título del material:");
-            String tipo = JOptionPane.showInputDialog(this, "Tipo (PDF, Video, Link, etc):");
-            String url = JOptionPane.showInputDialog(this, "URL o ruta del material:");
-            if (titulo != null && tipo != null && url != null && !titulo.trim().isEmpty()) {
-                if (curso.getMaterial() == null) curso.setMaterial(new ArrayList<>());
-                curso.getMaterial().add(new Material(curso.getMaterial().size() + 1, titulo, tipo, url));
-                refrescarLista.run();
-            }
+            btnAgregar.addActionListener(e -> {
+                String titulo = JOptionPane.showInputDialog(this, "Título del material:");
+                String tipo = JOptionPane.showInputDialog(this, "Tipo (PDF, Video, Link, etc):");
+                String url = JOptionPane.showInputDialog(this, "URL o ruta del material:");
+                if (titulo != null && tipo != null && url != null && !titulo.trim().isEmpty()) {
+                    if (curso.getMaterial() == null) curso.setMaterial(new ArrayList<>());
+                    curso.getMaterial().add(new Material(curso.getMaterial().size() + 1, titulo, tipo, url));
+                    refrescarLista.run();
+                }
         });
 
         panelBotones.add(btnAgregar);
@@ -401,7 +411,6 @@ public class Main extends JFrame {
     contenedor.add(panelMateriales, "materiales_" + curso.getIdCurso());
     layout.show(contenedor, "materiales_" + curso.getIdCurso());
 }
-
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
