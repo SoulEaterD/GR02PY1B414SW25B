@@ -27,12 +27,6 @@ public class AulaVirtual {
         return c1;
     }
 
-    public Curso seleccionarCurso(Estudiante estudiante) {
-        Curso c1 = cursosDisponibles.get(0);
-        c1.solicitarInscripcion(estudiante);
-        return c1;
-    }
-
     public List<Curso> getCursosDisponibles() {
         return cursosDisponibles;
     }

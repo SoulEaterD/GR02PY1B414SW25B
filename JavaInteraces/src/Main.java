@@ -238,7 +238,10 @@ public class Main extends JFrame {
         btnCerrarSesion.setForeground(Color.WHITE);
         btnCerrarSesion.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnCerrarSesion.setFocusPainted(false);
-        btnCerrarSesion.addActionListener(e -> layout.show(contenedor, "login"));
+        btnCerrarSesion.addActionListener(e -> {
+            layout.show(contenedor, "login");
+            usuarioEstudiante = null;
+        });
 
         JPanel contBotones = new JPanel();
         contBotones.setOpaque(false);
@@ -295,7 +298,7 @@ public class Main extends JFrame {
         panelOpciones.setBackground(new Color(45, 55, 72));
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(220, 220, 220, 220));
 
-        String[] opciones = { "Materiales", "Evaluaciones", "Registro de Notas" };
+        String[] opciones = { "Materiales", "Tareas", "Registro de Notas" };
 
         for (String opcion : opciones) {
             JButton btn = new JButton(opcion);
@@ -309,7 +312,7 @@ public class Main extends JFrame {
             btn.addActionListener(ev -> {
                 if (opcion.equals("Materiales")) {
                     mostrarPanelMateriales(curso, true);
-                } else if (opcion.equals("Evaluaciones")) {
+                } else if (opcion.equals("Tareas")) {
                     JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
                 } else if (opcion.equals("Registro de Notas")) {
                     JOptionPane.showMessageDialog(this, "Sección de Registro de Notas (en construcción)");
