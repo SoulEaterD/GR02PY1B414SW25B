@@ -7,6 +7,12 @@ public class Estudiante extends Usuario {
     private RegistroNotas notasEstudiante;
     private List<Evaluacion> evaluacionesRealizadas;
 
+    public void seleccionarEstudiante(Estudiante estudiante, Double calificacion) {
+        notasEstudiante.getCalificaciones().add(calificacion);
+        
+
+    }
+
     public void asignarNotaRegistro(Evaluacion evaluacion) {
         notasEstudiante.registrarEvaluacion(evaluacion);
         evaluacionesRealizadas.add(evaluacion);
@@ -46,6 +52,5 @@ public class Estudiante extends Usuario {
     public void setEvaluacionesRealizadas(List<Evaluacion> evaluacionesRealizadas) {
         this.evaluacionesRealizadas = evaluacionesRealizadas;
     }
-
         
 }

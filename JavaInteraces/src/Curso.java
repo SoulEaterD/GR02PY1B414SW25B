@@ -17,6 +17,15 @@ public class Curso {
         return mat;
     }
 
+    public Material calificarMaterial(int idMaterial) {
+        for (Material mat : material) {
+            if (mat.getIdMaterial() == idMaterial) {
+                Estudiante estudiante = estudiantes.get(0);
+                estudiante.seleccionarEstudiante(estudiante);
+            }
+        }
+        return null;
+    }
     public void solicitarInscripcion(Estudiante estudiante){
         estudiantes.add(estudiante);
         estudiante.guardarCurso(this);

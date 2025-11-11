@@ -4,19 +4,19 @@ import java.util.List;
 public class RegistroNotas {
 
     //confuso (cambiar) hay que pensarle mas
-    private List<Evaluacion> calificaciones;
-    public void registrarEvaluacion (Evaluacion evaluacion){
+    private List<Double> calificaciones;
+    public void registrarEvaluacion (Double evaluacion){
         calificaciones.add(evaluacion);
     }
     public RegistroNotas() {
         this.calificaciones = new ArrayList<>();
     }
 
-    public List<Evaluacion> getCalificaciones() {
+    public List<Double> getCalificaciones() {
         return calificaciones;
     }
 
-    public void setCalificaciones(List<Evaluacion> calificaciones) {
+    public void setCalificaciones(List<Double> calificaciones) {
         this.calificaciones = calificaciones;
     }
 }
