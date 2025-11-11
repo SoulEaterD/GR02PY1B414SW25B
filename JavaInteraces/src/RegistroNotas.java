@@ -3,11 +3,9 @@ import java.util.List;
 
 public class RegistroNotas {
 
-    //confuso (cambiar) hay que pensarle mas
+    // confuso (cambiar) hay que pensarle mas
     private List<Double> calificaciones;
-    public void registrarEvaluacion (Double evaluacion){
-        calificaciones.add(evaluacion);
-    }
+
     public RegistroNotas() {
         this.calificaciones = new ArrayList<>();
     }

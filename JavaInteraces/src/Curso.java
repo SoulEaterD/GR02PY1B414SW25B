@@ -11,62 +11,32 @@ public class Curso {
     private List<Material> material;
     private List<Evaluacion> evaluacion;
 
-    public Material crearMaterial(int id, String titulo, String tipo, String url) {
-        Material mat = new Material (id, titulo, tipo, url);
+    public Material crearMaterial(int id, String titulo, String tipo, String url, boolean deber) {
+        Material mat = new Material(id, titulo, tipo, url, deber);
+        if (mat.isDeber()) {
+            for (Estudiante e : estudiantes) {
+                e.getDeberes().add(mat);
+            }
+        }
         material.add(mat);
         return mat;
     }
 
-    public Material calificarMaterial(int idMaterial) {
-        for (Material mat : material) {
-            if (mat.getIdMaterial() == idMaterial) {
-                Estudiante estudiante = estudiantes.get(0);
-                estudiante.seleccionarEstudiante(estudiante);
-            }
-        }
-        return null;
+    public void calificarTarea(Estudiante e, Double nota) {
+        e.seleccionarEstudiante(nota);
     }
-    public void solicitarInscripcion(Estudiante estudiante){
+
+    public void solicitarInscripcion(Estudiante estudiante) {
         estudiantes.add(estudiante);
         estudiante.guardarCurso(this);
     }
-    
-    public void mostrarMaterial(){
+
+    public void mostrarMaterial() {
         for (Material mat : material) {
-            System.out.println("ID Material: "+ mat.getIdMaterial());
-            System.out.println("Título: "+ mat.getTitulo());
-            System.out.println("Contenido: "+ mat.getTipo());
-            System.out.println("Enlace: "+ mat.getUrl());
-        }
-    }
-
-    public Evaluacion elegirEvaluacion(Estudiante estudiante) {
-        mostrarEvaluacionesDisponibles();
-        Evaluacion ev = getEvaluacion().get(0);
-        ev.rendirEvaluacion();
-        estudiante.asignarNotaRegistro(ev);
-        estudiante.getEvaluacionesRealizadas().add(ev);
-        return ev;
-    }
-    
-    public Evaluacion crearEvaluacion(String titulo) {
-        Evaluacion evaluacionC = new Evaluacion(titulo);
-        evaluacionC.setPreguntas(evaluacionC.crearPreguntas(2));
-        evaluacion.add(evaluacionC);
-        return evaluacionC;
-    }
-
-    public void mostrarEvaluacionesDisponibles() {
-        if (evaluacion != null) {
-            int numeroEvaluaciones = 1;
-            for (Evaluacion eval : evaluacion) {
-                System.out.println(numeroEvaluaciones+"Título: " + eval.getTitulo());
-                System.out.println(eval.getPreguntas().size() + " preguntas disponibles.");
-                System.out.println(eval.getPreguntas().get(0).getOpciones().size() + " opciones por pregunta.");
-                numeroEvaluaciones++;
-            }
-        } else {
-            System.out.println("No hay evaluaciones disponibles.");
+            System.out.println("ID Material: " + mat.getIdMaterial());
+            System.out.println("Título: " + mat.getTitulo());
+            System.out.println("Contenido: " + mat.getTipo());
+            System.out.println("Enlace: " + mat.getUrl());
         }
     }
 

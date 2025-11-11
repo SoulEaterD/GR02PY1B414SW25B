@@ -5,27 +5,25 @@ public class Estudiante extends Usuario {
 
     private List<Curso> cursosEstudiante;
     private RegistroNotas notasEstudiante;
-    private List<Evaluacion> evaluacionesRealizadas;
+    private List<Material> deberes;
+    private int contadorTareaCalificada;
 
-    public void seleccionarEstudiante(Estudiante estudiante, Double calificacion) {
-        notasEstudiante.getCalificaciones().add(calificacion);
-        
-
+    public void seleccionarEstudiante(Double calificacion) {
+        if (contadorTareaCalificada < deberes.size()) {
+            notasEstudiante.getCalificaciones().add(calificacion);
+            ++contadorTareaCalificada;
+        }
     }
 
-    public void asignarNotaRegistro(Evaluacion evaluacion) {
-        notasEstudiante.registrarEvaluacion(evaluacion);
-        evaluacionesRealizadas.add(evaluacion);
-    }
-
-    public void guardarCurso(Curso curso){
+    public void guardarCurso(Curso curso) {
         cursosEstudiante.add(curso);
     }
 
     public Estudiante(String id, String correo, String contrasenia) {
         super(id, correo, contrasenia, false);
+        this.contadorTareaCalificada = 0;
         this.cursosEstudiante = new ArrayList<>();
-        this.evaluacionesRealizadas = new ArrayList<>();
+        this.deberes = new ArrayList<>();
         this.notasEstudiante = new RegistroNotas();
     }
 
@@ -45,12 +43,20 @@ public class Estudiante extends Usuario {
         this.notasEstudiante = notasEstudiante;
     }
 
-    public List<Evaluacion> getEvaluacionesRealizadas() {
-        return evaluacionesRealizadas;
+    public List<Material> getDeberes() {
+        return deberes;
     }
 
-    public void setEvaluacionesRealizadas(List<Evaluacion> evaluacionesRealizadas) {
-        this.evaluacionesRealizadas = evaluacionesRealizadas;
+    public void setDeberes(List<Material> deberes) {
+        this.deberes = deberes;
     }
-        
+
+    public int getContadorTareaCalificada() {
+        return contadorTareaCalificada;
+    }
+
+    public void setContadorTareaCalificada(int contadorTareaCalificada) {
+        this.contadorTareaCalificada = contadorTareaCalificada;
+    }
+
 }
