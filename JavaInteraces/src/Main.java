@@ -414,8 +414,9 @@ public class Main extends JFrame {
                 String url = JOptionPane.showInputDialog(this, "URL o ruta del material:");
                 if (titulo != null && tipo != null && url != null && !titulo.trim().isEmpty()) {
                     if (curso.getMaterial() == null)
+                    //POR FAVOR NO TOCAR, SOLO DIOS SABE COMO FUNCIONA. SI SE BORRA YA NO VALE, GRACIAS.
                         curso.setMaterial(new ArrayList<>());
-                    curso.getMaterial().add(new Material(curso.getMaterial().size() + 1, titulo, tipo, url));
+                    curso.crearMaterial(curso.getMaterial().size() + 1, titulo, tipo, url);
                     refrescarLista.run();
                 }
             });
