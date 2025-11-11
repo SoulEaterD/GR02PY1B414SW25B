@@ -12,22 +12,17 @@ public class Main extends JFrame {
     String contrasena;
 
     private List<Curso> cursosCreados = new ArrayList<>();
-    private Estudiante e1 = new Estudiante("Juan", "20252", "juan@patito.com", "123", null); 
+    private Estudiante e1 = new Estudiante("Juan", "20252", "juan@patito.com", "123", null);
 
-    public Curso crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente, List<Inscripcion> inscripcion, List<Estudiante> estudiantes, List<Material> material, List<Evaluacion> evaluacion){
+    public Curso crearCurso(int idCurso, String nombreCurso, String descripcionCurso, Docente docente,
+                            List<Inscripcion> inscripcion, List<Estudiante> estudiantes,
+                            List<Material> material, List<Evaluacion> evaluacion) {
         Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente, inscripcion, estudiantes, material, evaluacion);
         cursosCreados.add(c1);
         return c1;
     }
 
-    public Curso seleccionarCurso(Estudiante estudiante){
-        Curso c1 = cursosCreados.get(0);
-        c1.solicitarInscripcion(estudiante);
-        return c1;
-    }
-
     public Main() {
-
         super("Aula Virtual");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -46,9 +41,10 @@ public class Main extends JFrame {
         setVisible(true);
     }
 
-    //PANTALLA LOGIN
+    // -------------------------------
+    // LOGIN
+    // -------------------------------
     private JPanel crearPantallaLogin() {
-
         JPanel panelSesion = new JPanel(new GridBagLayout());
         panelSesion.setBackground(new Color(74, 85, 110));
         panelSesion.setBorder(BorderFactory.createEmptyBorder(30, 80, 30, 80));
@@ -57,7 +53,6 @@ public class Main extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.anchor = GridBagConstraints.CENTER;
 
         JLabel lblTitulo = new JLabel("INICIO DE SESIÓN", SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
@@ -70,7 +65,6 @@ public class Main extends JFrame {
         JLabel lblUsuario = new JLabel("Usuario:");
         lblUsuario.setFont(new Font("Segoe UI", Font.BOLD, 15));
         lblUsuario.setForeground(new Color(220, 225, 240));
-        gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         panelSesion.add(lblUsuario, gbc);
@@ -82,7 +76,6 @@ public class Main extends JFrame {
         txtUsuario.setCaretColor(Color.WHITE);
         txtUsuario.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         gbc.gridx = 1;
-        gbc.gridy = 1;
         panelSesion.add(txtUsuario, gbc);
 
         JLabel lblContrasena = new JLabel("Contraseña:");
@@ -99,7 +92,6 @@ public class Main extends JFrame {
         txtContrasena.setCaretColor(Color.WHITE);
         txtContrasena.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
         gbc.gridx = 1;
-        gbc.gridy = 2;
         panelSesion.add(txtContrasena, gbc);
 
         JButton btnIngresar = new JButton("Iniciar sesión");
@@ -108,7 +100,6 @@ public class Main extends JFrame {
         btnIngresar.setBackground(new Color(237, 87, 97));
         btnIngresar.setFocusPainted(false);
         btnIngresar.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        btnIngresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.gridwidth = 2;
@@ -134,9 +125,11 @@ public class Main extends JFrame {
         });
 
         return fondo;
-    };
+    }
 
-    //AULA DOCENTE
+    // -------------------------------
+    // AULA DOCENTE
+    // -------------------------------
     private JPanel crearPantallaAulaDocente() {
         JPanel panelAula = new JPanel(new BorderLayout());
         panelAula.setBackground(new Color(45, 55, 72));
@@ -172,22 +165,19 @@ public class Main extends JFrame {
         barra.add(contBotones, BorderLayout.EAST);
         panelAula.add(barra, BorderLayout.NORTH);
 
-        JPanel panelcursos = new JPanel();
-        panelcursos.setLayout(new BoxLayout(panelcursos, BoxLayout.Y_AXIS));
-        panelcursos.setBackground(new Color(45, 55, 72));
-        panelcursos.setBorder(BorderFactory.createEmptyBorder(30, 200, 30, 200));
+        JPanel panelCursos = new JPanel();
+        panelCursos.setLayout(new BoxLayout(panelCursos, BoxLayout.Y_AXIS));
+        panelCursos.setBackground(new Color(45, 55, 72));
+        panelCursos.setBorder(BorderFactory.createEmptyBorder(30, 200, 30, 200));
 
-        JScrollPane scroll = new JScrollPane(panelcursos);
+        JScrollPane scroll = new JScrollPane(panelCursos);
         scroll.setBorder(null);
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
         panelAula.add(scroll, BorderLayout.CENTER);
 
         btnCrearCurso.addActionListener(e -> {
-
             String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del curso:");
             if (nombre != null && !nombre.trim().isEmpty()) {
-                Curso nuevoCurso = crearCurso(cursosCreados.size() + 1, nombre, null, null, null, null, null, null);
-
+                Curso nuevoCurso = crearCurso(cursosCreados.size() + 1, nombre, null, null, null, null, new ArrayList<>(), null);
                 JButton btnCurso = new JButton(nombre);
                 btnCurso.setAlignmentX(Component.CENTER_ALIGNMENT);
                 btnCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
@@ -195,22 +185,22 @@ public class Main extends JFrame {
                 btnCurso.setBackground(new Color(96, 107, 134));
                 btnCurso.setForeground(Color.WHITE);
                 btnCurso.setFocusPainted(false);
-
                 btnCurso.addActionListener(ev -> mostrarPaginaCurso(nuevoCurso));
 
-                panelcursos.add(Box.createVerticalStrut(15));
-                panelcursos.add(btnCurso);
-                panelcursos.revalidate();
-                panelcursos.repaint();
+                panelCursos.add(Box.createVerticalStrut(15));
+                panelCursos.add(btnCurso);
+                panelCursos.revalidate();
+                panelCursos.repaint();
             }
         });
 
         return panelAula;
-    };
+    }
 
-    //AULA ESTUDIANTE
+    // -------------------------------
+    // AULA ESTUDIANTE
+    // -------------------------------
     private JPanel crearPantallaAulaEstudiante() {
-
         JPanel panelEstudiante = new JPanel(new BorderLayout());
         panelEstudiante.setBackground(new Color(45, 55, 72));
 
@@ -237,30 +227,26 @@ public class Main extends JFrame {
         barra.add(lblTitulo, BorderLayout.CENTER);
         barra.add(contBotones, BorderLayout.EAST);
 
-        JPanel panelcursos = new JPanel();
-        panelcursos.setLayout(new BoxLayout(panelcursos, BoxLayout.Y_AXIS));
-        panelcursos.setBackground(new Color(45, 55, 72));
-        panelcursos.setBorder(BorderFactory.createEmptyBorder(30, 200, 30, 200));
+        JPanel panelCursos = new JPanel();
+        panelCursos.setLayout(new BoxLayout(panelCursos, BoxLayout.Y_AXIS));
+        panelCursos.setBackground(new Color(45, 55, 72));
+        panelCursos.setBorder(BorderFactory.createEmptyBorder(30, 200, 30, 200));
 
         for (Curso curso : cursosCreados) {
-
             JButton btnCurso = new JButton(curso.getNombreCurso());
-                btnCurso.setAlignmentX(Component.CENTER_ALIGNMENT);
-                btnCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
-                btnCurso.setFont(new Font("Segoe UI", Font.BOLD, 18));
-                btnCurso.setBackground(new Color(96, 107, 134));
-                btnCurso.setForeground(Color.WHITE);
-                btnCurso.setFocusPainted(false);
+            btnCurso.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnCurso.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+            btnCurso.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            btnCurso.setBackground(new Color(96, 107, 134));
+            btnCurso.setForeground(Color.WHITE);
+            btnCurso.setFocusPainted(false);
+            btnCurso.addActionListener(ev -> mostrarPaginaCurso(curso));
 
-                btnCurso.addActionListener(ev -> mostrarPaginaCurso(curso));
-
-                panelcursos.add(Box.createVerticalStrut(15));
-                panelcursos.add(btnCurso);
-                panelcursos.revalidate();
-                panelcursos.repaint();
+            panelCursos.add(Box.createVerticalStrut(15));
+            panelCursos.add(btnCurso);
         }
 
-        JScrollPane scroll = new JScrollPane(panelcursos);
+        JScrollPane scroll = new JScrollPane(panelCursos);
         scroll.setBorder(null);
         scroll.setBackground(new Color(45, 55, 72));
         scroll.getViewport().setBackground(new Color(45, 55, 72));
@@ -271,9 +257,10 @@ public class Main extends JFrame {
         return panelEstudiante;
     }
 
-    //PAGINA DEL CURSO
+    // -------------------------------
+    // PÁGINA DEL CURSO
+    // -------------------------------
     private void mostrarPaginaCurso(Curso curso) {
-
         JPanel panelCurso = new JPanel(new BorderLayout());
         panelCurso.setBackground(new Color(45, 55, 72));
 
@@ -287,18 +274,32 @@ public class Main extends JFrame {
         panelOpciones.setBackground(new Color(45, 55, 72));
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(220, 220, 220, 220));
 
-        String[] opciones = {"Materiales", "Evaluaciones", "Registro de Notas"};
-        for (String opcion : opciones) {
-            JButton btn = new JButton(opcion);
-            btn.setFont(new Font("Segoe UI", Font.BOLD, 20));
-            btn.setForeground(Color.WHITE);
-            btn.setBackground(new Color(237, 87, 97));
-            btn.setFocusPainted(false);
-            btn.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
-            panelOpciones.add(btn);
-        }
+            String[] opciones = {"Materiales", "Evaluaciones", "Registro de Notas"};
+    for (String opcion : opciones) {
+        JButton btn = new JButton(opcion);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(new Color(237, 87, 97));
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        panelCurso.add(panelOpciones, BorderLayout.CENTER);
+        // 🔹 Acción para cada botón
+        btn.addActionListener(ev -> {
+            if (opcion.equals("Materiales")) {
+                // 👉 Aquí abrimos el panel de materiales
+                mostrarPanelMateriales(curso, true); // true = usuario docente
+            } else if (opcion.equals("Evaluaciones")) {
+                JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
+            } else if (opcion.equals("Registro de Notas")) {
+                JOptionPane.showMessageDialog(this, "Sección de Registro de Notas (en construcción)");
+            }
+        });
+
+        panelOpciones.add(btn);
+    }
+
+    panelCurso.add(panelOpciones, BorderLayout.CENTER);
 
         JButton btnVolver = new JButton("Volver");
         btnVolver.setBackground(new Color(237, 87, 97));
@@ -306,17 +307,101 @@ public class Main extends JFrame {
         btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnVolver.setFocusPainted(false);
         btnVolver.addActionListener(e -> {
-            if(usuario.equals("Jorge")) {
-                layout.show(contenedor, "aulaDocente");
-            } else if (usuario.equals("Guille")) {
-                layout.show(contenedor, "aulaEstudiante");
-            }
+            if (usuario.equals("Jorge")) layout.show(contenedor, "aulaDocente");
+            else layout.show(contenedor, "aulaEstudiante");
         });
         panelCurso.add(btnVolver, BorderLayout.SOUTH);
 
         contenedor.add(panelCurso, "paginaCurso_" + curso.getIdCurso());
         layout.show(contenedor, "paginaCurso_" + curso.getIdCurso());
     }
+
+    // -------------------------------
+    // PANEL DE MATERIALES
+    // -------------------------------
+    private void mostrarPanelMateriales(Curso curso, boolean esDocente) {
+    JPanel panelMateriales = new JPanel(new BorderLayout());
+    panelMateriales.setBackground(new Color(45, 55, 72));
+
+    JLabel lblTitulo = new JLabel("Materiales del curso: " + curso.getNombreCurso(), SwingConstants.CENTER);
+    lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+    lblTitulo.setForeground(Color.WHITE);
+    lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+    panelMateriales.add(lblTitulo, BorderLayout.NORTH);
+
+    JPanel listaPanel = new JPanel();
+    listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
+    listaPanel.setBackground(new Color(45, 55, 72));
+
+    JScrollPane scroll = new JScrollPane(listaPanel);
+    scroll.setBorder(null);
+    scroll.getViewport().setBackground(new Color(45, 55, 72));
+    panelMateriales.add(scroll, BorderLayout.CENTER);
+
+    Runnable refrescarLista = () -> {
+        listaPanel.removeAll();
+        if (curso.getMaterial() != null && !curso.getMaterial().isEmpty()) {
+            for (Material m : curso.getMaterial()) {
+                JPanel item = new JPanel(new BorderLayout());
+                item.setBackground(new Color(74, 85, 110));
+                item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+                JLabel lblMat = new JLabel("<html><b>" + m.getTitulo() + "</b> (" + m.getTipo() + ")<br><font color='#CCCCCC'>" + m.getUrl() + "</font></html>");
+                lblMat.setForeground(Color.WHITE);
+                item.add(lblMat, BorderLayout.CENTER);
+
+                listaPanel.add(Box.createVerticalStrut(10));
+                listaPanel.add(item);
+            }
+        } else {
+            JLabel lblVacio = new JLabel("No hay materiales disponibles.", SwingConstants.CENTER);
+            lblVacio.setForeground(Color.LIGHT_GRAY);
+            lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            listaPanel.add(lblVacio);
+        }
+        listaPanel.revalidate();
+        listaPanel.repaint();
+    };
+    refrescarLista.run();
+
+    JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+    panelBotones.setBackground(new Color(45, 55, 72));
+
+    JButton btnVolver = new JButton("Volver");
+    btnVolver.setBackground(new Color(237, 87, 97));
+    btnVolver.setForeground(Color.WHITE);
+    btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    btnVolver.setFocusPainted(false);
+    btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
+    panelBotones.add(btnVolver);
+
+    if (esDocente) {
+        JButton btnAgregar = new JButton("Crear material");
+        btnAgregar.setBackground(new Color(96, 107, 134));
+        btnAgregar.setForeground(Color.WHITE);
+        btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnAgregar.setFocusPainted(false);
+
+        btnAgregar.addActionListener(e -> {
+            String titulo = JOptionPane.showInputDialog(this, "Título del material:");
+            String tipo = JOptionPane.showInputDialog(this, "Tipo (PDF, Video, Link, etc):");
+            String url = JOptionPane.showInputDialog(this, "URL o ruta del material:");
+            if (titulo != null && tipo != null && url != null && !titulo.trim().isEmpty()) {
+                if (curso.getMaterial() == null) curso.setMaterial(new ArrayList<>());
+                curso.getMaterial().add(new Material(curso.getMaterial().size() + 1, titulo, tipo, url));
+                refrescarLista.run();
+            }
+        });
+
+        panelBotones.add(btnAgregar);
+    }
+
+    panelMateriales.add(panelBotones, BorderLayout.SOUTH);
+
+    contenedor.add(panelMateriales, "materiales_" + curso.getIdCurso());
+    layout.show(contenedor, "materiales_" + curso.getIdCurso());
+}
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
