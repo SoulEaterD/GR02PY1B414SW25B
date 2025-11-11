@@ -1,85 +1,30 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Estudiante {
+public class Estudiante extends Usuario {
 
-    private String nombreEstudiante;
-    private String idEstudiante;
-    private String correoEstudiante;
-    private String contraseniaEstudiante;
-    private boolean permisosEstudiante;
     private List<Curso> cursosEstudiante;
     private RegistroNotas notasEstudiante;
     private List<Evaluacion> evaluacionesRealizadas;
 
     public void asignarNotaRegistro(Evaluacion evaluacion) {
-        if (notasEstudiante == null && evaluacionesRealizadas == null) {
-            notasEstudiante = new RegistroNotas(null);
-            notasEstudiante.registrarEvaluacion(evaluacion);
-            evaluacionesRealizadas =  new ArrayList<>();
-        }else{
-            notasEstudiante.registrarEvaluacion(evaluacion);
-        }
+        notasEstudiante.registrarEvaluacion(evaluacion);
+        evaluacionesRealizadas.add(evaluacion);
     }
 
     public void guardarCurso(Curso curso){
-        if(cursosEstudiante==null){
-            cursosEstudiante = new ArrayList<>();
-        }
         cursosEstudiante.add(curso);
     }
 
-    public Estudiante(String nombreEstudiante, String idEstudiante, String correoEstudiante, String contraseniaEstudiante, List<Curso> cursosEstudiante) {
-        this.nombreEstudiante = nombreEstudiante;
-        this.idEstudiante = idEstudiante;
-        this.correoEstudiante = correoEstudiante;
-        this.contraseniaEstudiante = contraseniaEstudiante;
-        this.permisosEstudiante = false;
-        this.cursosEstudiante = cursosEstudiante;
-    }
-    
-    public String getNombreEstudiante() {
-        return nombreEstudiante;
-    }
-
-    public void setNombreEstudiante(String nombreEstudiante) {
-        this.nombreEstudiante = nombreEstudiante;
-    }
-
-    public String getIdEstudiante() {
-        return idEstudiante;
-    }
-
-    public void setIdEstudiante(String idEstudiante) {
-        this.idEstudiante = idEstudiante;
-    }
-
-    public String getCorreoEstudiante() {
-        return correoEstudiante;
-    }
-
-    public void setCorreoEstudiante(String correoEstudiante) {
-        this.correoEstudiante = correoEstudiante;
-    }
-
-    public String getContraseniaEstudiante() {
-        return contraseniaEstudiante;
-    }
-
-    public void setContraseniaEstudiante(String contraseniaEstudiante) {
-        this.contraseniaEstudiante = contraseniaEstudiante;
-    }
-
-    public boolean isPermisosEstudiante() {
-        return permisosEstudiante;
+    public Estudiante(String id, String correo, String contrasenia, boolean permisos) {
+        super(id, correo, contrasenia, permisos);
+        this.cursosEstudiante = new ArrayList<>();
+        this.evaluacionesRealizadas = new ArrayList<>();
+        this.notasEstudiante = new RegistroNotas();
     }
 
     public List<Curso> getCursosEstudiante() {
         return cursosEstudiante;
-    }
-
-    public void setPermisosEstudiante(boolean permisosEstudiante) {
-        this.permisosEstudiante = permisosEstudiante;
     }
 
     public void setCursosEstudiante(List<Curso> cursosEstudiante) {
