@@ -12,8 +12,9 @@ public class Main extends JFrame {
     private Docente docente = new Docente("1", "docente@docente.com", "123");
     private Estudiante e1 = new Estudiante("1", "juan@patito.com", "123");
     private Estudiante e2 = new Estudiante("2", "maria@patito.com", "123");
+    private Estudiante usuarioEstudiante;
     private AulaVirtual aulaVirtual = new AulaVirtual(docente);
-    
+
     public Main() {
 
         super("Aula Virtual");
@@ -109,13 +110,15 @@ public class Main extends JFrame {
             String contrasena = new String(txtContrasena.getPassword());
             boolean encontrado = false;
 
-            if(usuario.equals(docente.getCorreo()) && contrasena.equals(docente.getContrasenia())) {
+            if (usuario.equals(docente.getCorreo()) && contrasena.equals(docente.getContrasenia())) {
                 layout.show(contenedor, "aulaDocente");
                 encontrado = true;
             } else {
-                for(int i = 0; i < aulaVirtual.estudiantesRegistrados.size(); i++) {
-                    if(usuario.equals(aulaVirtual.estudiantesRegistrados.get(i).getCorreo()) && contrasena.equals(aulaVirtual.estudiantesRegistrados.get(i).getContrasenia())) {
-                        JPanel pantallaEstudiante = crearPantallaAulaEstudiante(aulaVirtual.estudiantesRegistrados.get(i));
+                for (int i = 0; i < aulaVirtual.estudiantesRegistrados.size(); i++) {
+                    if (usuario.equals(aulaVirtual.estudiantesRegistrados.get(i).getCorreo())
+                            && contrasena.equals(aulaVirtual.estudiantesRegistrados.get(i).getContrasenia())) {
+                        JPanel pantallaEstudiante = crearPantallaAulaEstudiante(
+                                aulaVirtual.estudiantesRegistrados.get(i));
                         contenedor.add(pantallaEstudiante, "aulaEstudiante");
                         layout.show(contenedor, "aulaEstudiante");
                         encontrado = true;
@@ -124,8 +127,14 @@ public class Main extends JFrame {
                 }
             }
 
-            if(!encontrado) {
-                    JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            if (!encontrado) {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            } else {
+                for (Estudiante est : aulaVirtual.estudiantesRegistrados) {
+                    if (est.getCorreo().equals(usuario)) {
+                        usuarioEstudiante = est;
+                    }
+                }
             }
         });
 
@@ -183,9 +192,10 @@ public class Main extends JFrame {
             String nombre = JOptionPane.showInputDialog(this, "Ingrese el nombre del curso:");
             if (nombre != null && !nombre.trim().isEmpty()) {
 
-                Curso nuevoCurso = aulaVirtual.crearCurso(aulaVirtual.getCursosDisponibles().size() + 1, nombre, "", docente);
+                Curso nuevoCurso = aulaVirtual.crearCurso(aulaVirtual.getCursosDisponibles().size() + 1, nombre, "",
+                        docente);
 
-                for(Estudiante registrado : aulaVirtual.getEstudiantesRegistrados()) {
+                for (Estudiante registrado : aulaVirtual.getEstudiantesRegistrados()) {
                     registrado.guardarCurso(nuevoCurso);
                 }
 
@@ -285,26 +295,26 @@ public class Main extends JFrame {
         panelOpciones.setBackground(new Color(45, 55, 72));
         panelOpciones.setBorder(BorderFactory.createEmptyBorder(220, 220, 220, 220));
 
-        String[] opciones = {"Materiales", "Evaluaciones", "Registro de Notas"};
+        String[] opciones = { "Materiales", "Evaluaciones", "Registro de Notas" };
 
         for (String opcion : opciones) {
-        JButton btn = new JButton(opcion);
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        btn.setForeground(Color.WHITE);
-        btn.setBackground(new Color(237, 87, 97));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            JButton btn = new JButton(opcion);
+            btn.setFont(new Font("Segoe UI", Font.BOLD, 20));
+            btn.setForeground(Color.WHITE);
+            btn.setBackground(new Color(237, 87, 97));
+            btn.setFocusPainted(false);
+            btn.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
+            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        btn.addActionListener(ev -> {
-            if (opcion.equals("Materiales")) {
-                mostrarPanelMateriales(curso, true);
-            } else if (opcion.equals("Evaluaciones")) {
-                JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
-            } else if (opcion.equals("Registro de Notas")) {
-                JOptionPane.showMessageDialog(this, "Sección de Registro de Notas (en construcción)");
-            }
-        });
+            btn.addActionListener(ev -> {
+                if (opcion.equals("Materiales")) {
+                    mostrarPanelMateriales(curso, true);
+                } else if (opcion.equals("Evaluaciones")) {
+                    JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
+                } else if (opcion.equals("Registro de Notas")) {
+                    JOptionPane.showMessageDialog(this, "Sección de Registro de Notas (en construcción)");
+                }
+            });
 
             panelOpciones.add(btn);
         }
@@ -317,8 +327,10 @@ public class Main extends JFrame {
         btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnVolver.setFocusPainted(false);
         btnVolver.addActionListener(e -> {
-            if (usuario.equals(docente.getCorreo())) layout.show(contenedor, "aulaDocente");
-            else layout.show(contenedor, "aulaEstudiante");
+            if (usuario.equals(docente.getCorreo()))
+                layout.show(contenedor, "aulaDocente");
+            else
+                layout.show(contenedor, "aulaEstudiante");
         });
 
         panelCurso.add(btnVolver, BorderLayout.SOUTH);
@@ -356,7 +368,8 @@ public class Main extends JFrame {
                     item.setBackground(new Color(74, 85, 110));
                     item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-                    JLabel lblMat = new JLabel("<html><b>" + m.getTitulo() + "</b> (" + m.getTipo() + ")<br><font color='#CCCCCC'>" + m.getUrl() + "</font></html>");
+                    JLabel lblMat = new JLabel("<html><b>" + m.getTitulo() + "</b> (" + m.getTipo()
+                            + ")<br><font color='#CCCCCC'>" + m.getUrl() + "</font></html>");
                     lblMat.setForeground(Color.WHITE);
                     item.add(lblMat, BorderLayout.CENTER);
 
@@ -397,20 +410,21 @@ public class Main extends JFrame {
                 String tipo = JOptionPane.showInputDialog(this, "Tipo (PDF, Video, Link, etc):");
                 String url = JOptionPane.showInputDialog(this, "URL o ruta del material:");
                 if (titulo != null && tipo != null && url != null && !titulo.trim().isEmpty()) {
-                    if (curso.getMaterial() == null) curso.setMaterial(new ArrayList<>());
+                    if (curso.getMaterial() == null)
+                        curso.setMaterial(new ArrayList<>());
                     curso.getMaterial().add(new Material(curso.getMaterial().size() + 1, titulo, tipo, url));
                     refrescarLista.run();
                 }
-        });
+            });
 
-        panelBotones.add(btnAgregar);
+            panelBotones.add(btnAgregar);
+        }
+
+        panelMateriales.add(panelBotones, BorderLayout.SOUTH);
+
+        contenedor.add(panelMateriales, "materiales_" + curso.getIdCurso());
+        layout.show(contenedor, "materiales_" + curso.getIdCurso());
     }
-
-    panelMateriales.add(panelBotones, BorderLayout.SOUTH);
-
-    contenedor.add(panelMateriales, "materiales_" + curso.getIdCurso());
-    layout.show(contenedor, "materiales_" + curso.getIdCurso());
-}
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);

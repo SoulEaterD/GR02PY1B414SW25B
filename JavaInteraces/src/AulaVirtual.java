@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AulaVirtual {
-    
+
     List<Curso> cursosDisponibles;
     Docente docenteCurso;
     List<Estudiante> estudiantesRegistrados;
@@ -13,13 +13,21 @@ public class AulaVirtual {
         this.estudiantesRegistrados = new ArrayList<>();
     }
 
-    public Curso crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente){
+    public List<Material> getMaterial(Curso curso) {
+        return curso.getMaterial();
+    }
+
+    public List<Estudiante> getEstudianteCurso(Curso curso) {
+        return curso.getEstudiantes();
+    }
+
+    public Curso crearCurso(int idCurso, String nombreCurso, String descripcionCurso, Docente docente) {
         Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente);
         cursosDisponibles.add(c1);
         return c1;
     }
 
-    public Curso seleccionarCurso(Estudiante estudiante){
+    public Curso seleccionarCurso(Estudiante estudiante) {
         Curso c1 = cursosDisponibles.get(0);
         c1.solicitarInscripcion(estudiante);
         return c1;

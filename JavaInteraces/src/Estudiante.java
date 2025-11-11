@@ -5,15 +5,8 @@ public class Estudiante extends Usuario {
 
     private List<Curso> cursosEstudiante;
     private RegistroNotas notasEstudiante;
-    private List<Material> deberes;
+    private List<Tarea> deberes;
     private int contadorTareaCalificada;
-
-    public void seleccionarEstudiante(Double calificacion) {
-        if (contadorTareaCalificada < deberes.size()) {
-            notasEstudiante.getCalificaciones().add(calificacion);
-            ++contadorTareaCalificada;
-        }
-    }
 
     public void guardarCurso(Curso curso) {
         cursosEstudiante.add(curso);
@@ -43,11 +36,11 @@ public class Estudiante extends Usuario {
         this.notasEstudiante = notasEstudiante;
     }
 
-    public List<Material> getDeberes() {
+    public List<Tarea> getDeberes() {
         return deberes;
     }
 
-    public void setDeberes(List<Material> deberes) {
+    public void setDeberes(List<Tarea> deberes) {
         this.deberes = deberes;
     }
 

@@ -10,20 +10,27 @@ public class Curso {
     private List<Estudiante> estudiantes;
     private List<Material> material;
     private List<Evaluacion> evaluacion;
+    private List<Tarea> tareas;
+    private RegistroNotas rNotas;
 
-    public Material crearMaterial(int id, String titulo, String tipo, String url, boolean deber) {
-        Material mat = new Material(id, titulo, tipo, url, deber);
-        if (mat.isDeber()) {
-            for (Estudiante e : estudiantes) {
-                e.getDeberes().add(mat);
-            }
+    public List<Tarea> crearTarea(String titulo, String descripcion) {
+        Tarea tarea = new Tarea(titulo, descripcion);
+        tareas.add(tarea);
+        for (Estudiante est : estudiantes) {
+            est.setDeberes(new ArrayList<>(tareas));
         }
-        material.add(mat);
-        return mat;
+        return tareas;
     }
 
-    public void calificarTarea(Estudiante e, Double nota) {
-        e.seleccionarEstudiante(nota);
+    public void calificarTarea(Tarea tarea, Double calificacion) {
+        tarea.setCalificacion(calificacion);
+        rNotas.getCalificaciones().add(calificacion);
+    }
+
+    public Material crearMaterial(int id, String titulo, String tipo, String url) {
+        Material mat = new Material(id, titulo, tipo, url);
+        material.add(mat);
+        return mat;
     }
 
     public void solicitarInscripcion(Estudiante estudiante) {
@@ -106,4 +113,11 @@ public class Curso {
         this.evaluacion = evaluacione;
     }
 
+    public RegistroNotas getrNotas() {
+        return rNotas;
+    }
+
+    public void setrNotas(RegistroNotas rNotas) {
+        this.rNotas = rNotas;
+    }
 }

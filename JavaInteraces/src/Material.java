@@ -4,14 +4,12 @@ public class Material {
     private String titulo;
     private String tipo;
     private String url;
-    private boolean deber;
 
-    public Material(int idMaterial, String titulo, String tipo, String url, boolean deber) {
+    public Material(int idMaterial, String titulo, String tipo, String url) {
         this.idMaterial = idMaterial;
         this.titulo = titulo;
         this.tipo = tipo;
         this.url = url;
-        this.deber = deber;
     }
 
     public int getIdMaterial() {
@@ -44,14 +42,6 @@ public class Material {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public boolean isDeber() {
-        return deber;
-    }
-
-    public void setDeber(boolean deber) {
-        this.deber = deber;
     }
 
 }
