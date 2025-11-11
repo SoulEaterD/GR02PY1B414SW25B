@@ -401,7 +401,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (usuario == docente.getCorreo()) {
+        if (usuario.equals(docente.getCorreo())) {
             JButton btnAgregar = new JButton("Crear material");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);
