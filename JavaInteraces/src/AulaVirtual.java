@@ -6,14 +6,13 @@ public class AulaVirtual {
     List<Curso> cursosDisponibles;
     List<Docente> docentesDisponibles;
     List<Estudiante> estudiantesRegistrados;
-    public AulaVirtual(List<Curso> cursosDisponibles, List<Docente> docentesDisponibles,
-            List<Estudiante> estudiantesRegistrados) {
+    public AulaVirtual() {
         this.cursosDisponibles = new ArrayList<>();
         this.docentesDisponibles = new ArrayList<>();
         this.estudiantesRegistrados = new ArrayList<>();
     }
-    public Curso crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente, List<Inscripcion> inscripcion, List<Estudiante> estudiantes, List<Material> material, List<Evaluacion> evaluacion){
-        Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente, inscripcion, estudiantes, material, evaluacion);
+    public Curso crearCurso(int idCurso,  String nombreCurso, String descripcionCurso, Docente docente){
+        Curso c1 = new Curso(idCurso, nombreCurso, descripcionCurso, docente);
         cursosDisponibles.add(c1);
         return c1;
     }
