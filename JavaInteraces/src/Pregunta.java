@@ -9,17 +9,19 @@ public class Pregunta {
     private List<String> opciones;
     
     public List<String> crearOpciones() {
+        if (opciones == null) {
+            opciones = new ArrayList<>(); 
+        }
         for (int i = 0; i < 4; i++) {
             opciones.add((char)('A' + i)+ "opcion");
         }
         return opciones;
     }
-    
-    public Pregunta(int idPregunta, String enunciado, String respuestaCorrecta) {
+    public Pregunta(int idPregunta, String enunciado, String respuestaCorrecta, List<String> opciones) {
         this.idPregunta = idPregunta;
         this.enunciado = enunciado;
         this.respuestaCorrecta = respuestaCorrecta;
-        this.opciones = new ArrayList<>();
+        this.opciones = opciones;
     }
     
     public int getIdPregunta() {
@@ -52,5 +54,9 @@ public class Pregunta {
     
     public void setOpciones(List<String> opciones) {
         this.opciones = opciones;
+    }
+    public Object getId() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getId'");
     }
 }

@@ -21,9 +21,19 @@ public class Evaluacion {
         return this;
     }
 
+    public Evaluacion(String titulo, List<Pregunta> preguntas, double calificacion) {
+        this.titulo = titulo;
+        this.preguntas = preguntas;
+        this.calificacion = calificacion;
+    }
+
     public List<Pregunta> crearPreguntas(int numeroPreguntas) {
+        if (preguntas == null) {
+            preguntas = new ArrayList<>(); 
+        }
+
         for (int i = 0; i < numeroPreguntas; i++) {
-            Pregunta pregunta = new Pregunta(i + 1, null, null);
+            Pregunta pregunta = new Pregunta(i + 1, null, null, null);
             String enunciado = "Pregunta " + (i + 1);
             List<String> opciones = pregunta.crearOpciones();
             String respuestaCorrecta = "Opción D";
@@ -33,12 +43,6 @@ public class Evaluacion {
             preguntas.add(pregunta);
         }
         return preguntas;
-    }
-
-    public Evaluacion(String titulo) {
-        this.titulo = titulo;
-        this.calificacion = 0.0;
-        this.preguntas = new ArrayList<>();
     }
 
     public double getCalificacion() {
