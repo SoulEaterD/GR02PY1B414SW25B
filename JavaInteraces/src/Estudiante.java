@@ -12,8 +12,8 @@ public class Estudiante extends Usuario {
         cursosEstudiante.add(curso);
     }
 
-    public Estudiante(String id, String correo, String contrasenia) {
-        super(id, correo, contrasenia, false);
+    public Estudiante(String id, String nombre, String correo, String contrasenia) {
+        super(id, nombre, correo, contrasenia, false);
         this.contadorTareaCalificada = 0;
         this.cursosEstudiante = new ArrayList<>();
         this.deberes = new ArrayList<>();
