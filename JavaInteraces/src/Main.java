@@ -412,7 +412,198 @@ public class Main extends JFrame {
     layout.show(contenedor, "materiales_" + curso.getIdCurso());
 }
 
+    private JPanel crearPanelEvaluacionesDocente(Curso curso) {
+    JPanel panelEvaluaciones = new JPanel(new BorderLayout());
+    panelEvaluaciones.setBackground(new Color(30, 40, 60));
+
+    JLabel lblTitulo = new JLabel("Evaluaciones de " + curso.getNombreCurso(), SwingConstants.CENTER);
+    lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
+    lblTitulo.setForeground(Color.WHITE);
+    lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+    panelEvaluaciones.add(lblTitulo, BorderLayout.NORTH);
+
+    JPanel listaEvaluaciones = new JPanel();
+    listaEvaluaciones.setLayout(new BoxLayout(listaEvaluaciones, BoxLayout.PAGE_AXIS));
+    listaEvaluaciones.setBackground(new Color(30, 40, 60));
+
+    JScrollPane scroll = new JScrollPane(listaEvaluaciones);
+    scroll.setBorder(null);
+    scroll.getViewport().setBackground(new Color(30, 40, 60));
+    panelEvaluaciones.add(scroll, BorderLayout.CENTER);
+
+    JButton btnCrearEvaluacion = new JButton("Crear Evaluación");
+    btnCrearEvaluacion.setBackground(new Color(60, 90, 150));
+    btnCrearEvaluacion.setForeground(Color.WHITE);
+    btnCrearEvaluacion.setFont(new Font("Segoe UI", Font.BOLD, 14));
+    btnCrearEvaluacion.setFocusPainted(false);
+    btnCrearEvaluacion.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+    JPanel barraInferior = new JPanel(new BorderLayout());
+    barraInferior.setBackground(new Color(30, 40, 60));
+    barraInferior.add(btnCrearEvaluacion, BorderLayout.EAST);
+    barraInferior.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+    panelEvaluaciones.add(barraInferior, BorderLayout.SOUTH);
+
+    btnCrearEvaluacion.addActionListener(e -> {
+        List<Pregunta> preguntasTemp = new ArrayList<>();
+
+        JPanel panelCrearEval = new JPanel(new BorderLayout());
+        panelCrearEval.setPreferredSize(new Dimension(700, 500));
+        panelCrearEval.setBackground(new Color(45, 60, 90));
+        panelCrearEval.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
+        JLabel lblNuevaEval = new JLabel("Nueva Evaluación", SwingConstants.CENTER);
+        lblNuevaEval.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblNuevaEval.setForeground(Color.WHITE);
+        panelCrearEval.add(lblNuevaEval, BorderLayout.NORTH);
+
+        JPanel panelPreguntas = new JPanel();
+        panelPreguntas.setLayout(new BoxLayout(panelPreguntas, BoxLayout.Y_AXIS));
+        panelPreguntas.setBackground(new Color(45, 60, 90));
+
+        JScrollPane scrollPreguntas = new JScrollPane(panelPreguntas);
+        scrollPreguntas.setBorder(null);
+        panelCrearEval.add(scrollPreguntas, BorderLayout.CENTER);
+
+        JPanel barraBotones = new JPanel(new BorderLayout());
+        barraBotones.setBackground(new Color(45, 60, 90));
+
+        JButton btnAnadirPregunta = new JButton("Añadir Pregunta");
+        btnAnadirPregunta.setBackground(new Color(70, 110, 190));
+        btnAnadirPregunta.setForeground(Color.WHITE);
+        btnAnadirPregunta.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JButton btnGuardarEval = new JButton("Guardar Evaluación");
+        btnGuardarEval.setBackground(new Color(60, 160, 90));
+        btnGuardarEval.setForeground(Color.WHITE);
+        btnGuardarEval.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        barraBotones.add(btnGuardarEval, BorderLayout.WEST);
+        barraBotones.add(btnAnadirPregunta, BorderLayout.EAST);
+        panelCrearEval.add(barraBotones, BorderLayout.SOUTH);
+
+        JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(panelEvaluaciones), "Crear Evaluación", true);
+        dialog.getContentPane().add(panelCrearEval);
+        dialog.pack();
+        dialog.setLocationRelativeTo(panelEvaluaciones);
+
+        btnAnadirPregunta.addActionListener(ev -> {
+            JPanel tarjeta = new JPanel();
+            tarjeta.setLayout(new BoxLayout(tarjeta, BoxLayout.Y_AXIS));
+            tarjeta.setBackground(new Color(60, 80, 120));
+            tarjeta.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+            JTextField txtPregunta = new JTextField("Escribe la pregunta aquí...");
+            txtPregunta.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+            tarjeta.add(txtPregunta);
+
+            JPanel opcionesPanel = new JPanel();
+            opcionesPanel.setLayout(new BoxLayout(opcionesPanel, BoxLayout.Y_AXIS));
+            opcionesPanel.setBackground(new Color(60, 80, 120));
+
+            List<JTextField> camposOpciones = new ArrayList<>();
+            ButtonGroup grupo = new ButtonGroup();
+
+            for (int i = 0; i < 4; i++) {
+                JPanel fila = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                fila.setBackground(new Color(60, 80, 120));
+                JRadioButton rb = new JRadioButton();
+                rb.setBackground(new Color(60, 80, 120));
+                rb.setForeground(Color.WHITE);
+                JTextField txtOpcion = new JTextField("Opción " + (i + 1), 20);
+                grupo.add(rb);
+                camposOpciones.add(txtOpcion);
+                fila.add(rb);
+                fila.add(txtOpcion);
+                opcionesPanel.add(fila);
+            }
+
+            tarjeta.add(opcionesPanel);
+
+            JButton btnGuardarPregunta = new JButton("Guardar Pregunta");
+            btnGuardarPregunta.setBackground(new Color(100, 180, 100));
+            btnGuardarPregunta.setForeground(Color.WHITE);
+            btnGuardarPregunta.setFont(new Font("Segoe UI", Font.BOLD, 12));
+            tarjeta.add(btnGuardarPregunta);
+
+            panelPreguntas.add(tarjeta);
+            panelPreguntas.add(Box.createVerticalStrut(10));
+            panelPreguntas.revalidate();
+            panelPreguntas.repaint();
+
+            btnGuardarPregunta.addActionListener(ev2 -> {
+                String enunciado = txtPregunta.getText();
+                List<String> opciones = new ArrayList<>();
+                String respuestaCorrecta = null;
+
+                for (int i = 0; i < camposOpciones.size(); i++) {
+                    String texto = camposOpciones.get(i).getText();
+                    opciones.add(texto);
+                    JPanel fila = (JPanel) opcionesPanel.getComponent(i);
+                    JRadioButton rb = (JRadioButton) fila.getComponent(0);
+                    if (rb.isSelected()) respuestaCorrecta = texto;
+                }
+
+                if (respuestaCorrecta == null) {
+                    JOptionPane.showMessageDialog(panelCrearEval, "Selecciona una respuesta correcta.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+
+                preguntasTemp.add(new Pregunta(preguntasTemp.size() + 1, enunciado, respuestaCorrecta, opciones));
+                JOptionPane.showMessageDialog(panelCrearEval, "Pregunta guardada correctamente.");
+            });
+        });
+
+        btnGuardarEval.addActionListener(ev -> {
+            if (preguntasTemp.isEmpty()) {
+                JOptionPane.showMessageDialog(panelCrearEval, "Debes añadir al menos una pregunta.", "Aviso", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String tituloEval = JOptionPane.showInputDialog(panelCrearEval, "Título de la evaluación:");
+            if (tituloEval == null || tituloEval.trim().isEmpty()) return;
+
+            Evaluacion nuevaEval = curso.crearEvaluacion(tituloEval, preguntasTemp);
+
+            JPanel tarjetaEval = new JPanel(new BorderLayout());
+            tarjetaEval.setBackground(new Color(70, 90, 140));
+            tarjetaEval.setPreferredSize(new Dimension(220, 120));
+            tarjetaEval.setMaximumSize(new Dimension(220,120));
+            tarjetaEval.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+            JLabel lblNombreEval = new JLabel(nuevaEval.getTitulo());
+            lblNombreEval.setForeground(Color.WHITE);
+            lblNombreEval.setFont(new Font("Segoe UI", Font.BOLD, 20));
+            tarjetaEval.add(lblNombreEval, BorderLayout.CENTER);
+            tarjetaEval.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            /*tarjetaEval.addMouseListener(new java.awt.event.MouseAdapter() {
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    StringBuilder sb = new StringBuilder("Preguntas de " + nuevaEval.getTitulo() + ":\n\n");
+                    for (Pregunta p : nuevaEval.getPreguntas()) {
+                        sb.append(p.getIdPregunta()).append(". ").append(p.getEnunciado()).append("\n");
+                    }
+                    JOptionPane.showMessageDialog(panelEvaluaciones, sb.toString(), "Evaluación", JOptionPane.INFORMATION_MESSAGE);
+                }
+            }); */ //POR REVISAR
+
+            listaEvaluaciones.add(Box.createVerticalStrut(10));
+            listaEvaluaciones.add(tarjetaEval);
+            listaEvaluaciones.revalidate();
+            listaEvaluaciones.repaint();
+
+            dialog.dispose();
+            JOptionPane.showMessageDialog(panelEvaluaciones, "Evaluación guardada exitosamente.");
+        });
+
+        dialog.setVisible(true);
+    });
+
+    return panelEvaluaciones;
+}
+    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
     }
 }
+
