@@ -312,8 +312,10 @@ public class Main extends JFrame {
             btn.addActionListener(ev -> {
                 if (opcion.equals("Materiales")) {
                     mostrarPanelMateriales(curso, true);
+                    System.out.println("Mostrando panel de materiales");
                 } else if (opcion.equals("Tareas")) {
-                    JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
+                    mostrarPanelTareas(curso, true);
+                    System.out.println("Mostrando panel de tareas");
                 } else if (opcion.equals("Registro de Notas")) {
                     mostrarPanelNotas(curso, true);
                 }
@@ -429,6 +431,90 @@ public class Main extends JFrame {
 
         contenedor.add(panelMateriales, "materiales_" + curso.getIdCurso());
         layout.show(contenedor, "materiales_" + curso.getIdCurso());
+    }
+
+    //PANEL TAREAS
+    private void mostrarPanelTareas(Curso curso, boolean esDocente) {
+        JPanel panelTareas = new JPanel(new BorderLayout());
+        panelTareas.setBackground(new Color(45, 55, 72));
+
+        JLabel lblTitulo = new JLabel("Tareas del curso: " + curso.getNombreCurso(), SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        panelTareas.add(lblTitulo, BorderLayout.NORTH);
+
+        JPanel listaPanelT = new JPanel();
+        listaPanelT.setLayout(new BoxLayout(listaPanelT, BoxLayout.Y_AXIS));
+        listaPanelT.setBackground(new Color(45, 55, 72));
+
+        JScrollPane scroll = new JScrollPane(listaPanelT);
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(new Color(45, 55, 72));
+        panelTareas.add(scroll, BorderLayout.CENTER);
+
+        Runnable refrescarListaT = () -> {
+            listaPanelT.removeAll();
+            if (curso.getTareas() != null && !curso.getTareas().isEmpty()) {
+                for (Tarea t : curso.getTareas()) {
+                    JPanel item = new JPanel(new BorderLayout());
+                    item.setBackground(new Color(74, 85, 110));
+                    item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+                    JLabel lblTareas = new JLabel("<html><b>" + t.getTitulo() + "</b>" + "<br><font color='#CCCCCC'>" + t.getDescripcion() + "</font></br></html>");
+                    lblTareas.setForeground(Color.WHITE);
+                    item.add(lblTareas, BorderLayout.CENTER);
+
+                    listaPanelT.add(Box.createVerticalStrut(10));
+                    listaPanelT.add(item);
+                }
+            } else {
+                JLabel lblVacio = new JLabel("No hay tareas en este momento.", SwingConstants.CENTER);
+                lblVacio.setForeground(Color.LIGHT_GRAY);
+                lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                listaPanelT.add(lblVacio);
+            }
+            listaPanelT.revalidate();
+            listaPanelT.repaint();
+        };
+        refrescarListaT.run();
+
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        panelBotones.setBackground(new Color(45, 55, 72));
+
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(237, 87, 97));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnVolver.setFocusPainted(false);
+        btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
+        panelBotones.add(btnVolver);
+
+        if (esDocente) {
+            JButton btnAgregar = new JButton("Mandar Tarea");
+            btnAgregar.setBackground(new Color(96, 107, 134));
+            btnAgregar.setForeground(Color.WHITE);
+            btnAgregar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            btnAgregar.setFocusPainted(false);
+
+            btnAgregar.addActionListener(e -> {
+                String tituloT = JOptionPane.showInputDialog(this, "Título de la tarea:");
+                String desc = JOptionPane.showInputDialog(this, "Descripción de la Tarea:");
+                if (tituloT != null && desc != null && !tituloT.trim().isEmpty()) {
+                    if (curso.getTareas() == null)
+                        // POR FAVOR NO TOCAR, SOLO DIOS SABE COMO FUNCIONA. SI SE BORRA YA NO VALE,
+                        // GRACIAS.
+                        curso.setTareas(new ArrayList<>());
+                    curso.crearTarea(tituloT + "\n", desc);
+                    refrescarListaT.run();
+                }
+            });
+
+            panelBotones.add(btnAgregar);
+        }
+        panelTareas.add(panelBotones, BorderLayout.SOUTH);
+        contenedor.add(panelTareas, "tareas_" + curso.getIdCurso());
+        layout.show(contenedor, "tareas_" + curso.getIdCurso());
     }
 
     // PANEL NOTAS
