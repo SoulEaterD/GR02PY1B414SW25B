@@ -12,6 +12,17 @@ public class Curso {
     private List<Tarea> tareas;
     private RegistroNotas rNotas;
 
+    public Tarea obtenerTareaPorTitulo(String titulo) {
+        if (tareas == null)
+            return null;
+        for (Tarea t : tareas) {
+            if (t.getTitulo().equalsIgnoreCase(titulo)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
     public List<Tarea> crearTarea(String titulo, String descripcion) {
         Tarea tarea = new Tarea(titulo, descripcion);
         tareas.add(tarea);
@@ -21,7 +32,8 @@ public class Curso {
         return tareas;
     }
 
-    public void calificarTarea(Tarea tarea, Double calificacion) {
+    public void calificarTarea(Estudiante estudiante,Tarea tarea, Double calificacion) {
+        estudiante.getNotasEstudiante().getCalificaciones().add(calificacion);
         tarea.setCalificacion(calificacion);
         rNotas.getCalificaciones().add(calificacion);
     }

@@ -315,7 +315,7 @@ public class Main extends JFrame {
                 } else if (opcion.equals("Tareas")) {
                     JOptionPane.showMessageDialog(this, "Sección de Evaluaciones (en construcción)");
                 } else if (opcion.equals("Registro de Notas")) {
-                    JOptionPane.showMessageDialog(this, "Sección de Registro de Notas (en construcción)");
+                    mostrarPanelNotas(curso, true);
                 }
             });
 
