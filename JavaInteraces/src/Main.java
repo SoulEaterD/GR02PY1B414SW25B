@@ -1,7 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Main extends JFrame {
 
@@ -12,6 +11,7 @@ public class Main extends JFrame {
     private Docente docente = new Docente("1", "Pepito Candela", "docente@docente.com", "123");
     private Estudiante e1 = new Estudiante("1", "Juan Suarez", "juan@patito.com", "123");
     private Estudiante e2 = new Estudiante("2", "Maria Suarez", "maria@patito.com", "123");
+    private Estudiante e3 = new Estudiante("3", "Jorge Oviiedo", "jorge@patito.com", "123");
     private Estudiante usuarioEstudiante;
     private AulaVirtual aulaVirtual = new AulaVirtual(docente);
 
@@ -25,6 +25,7 @@ public class Main extends JFrame {
         contenedor = new JPanel(layout);
         aulaVirtual.getEstudiantesRegistrados().add(e1);
         aulaVirtual.getEstudiantesRegistrados().add(e2);
+        aulaVirtual.getEstudiantesRegistrados().add(e3);
 
         JPanel pantallaLogin = crearPantallaLogin();
         JPanel pantallaAulaDocente = crearPantallaAulaDocente();
@@ -576,7 +577,6 @@ public class Main extends JFrame {
 
     // PANEL NOTAS
     private void mostrarPanelNotas(Curso curso, boolean esDocente) {
-
         JPanel panelNotas = new JPanel(new BorderLayout());
         panelNotas.setBackground(new Color(45, 55, 72));
 
@@ -600,54 +600,36 @@ public class Main extends JFrame {
         // Refrescar lista de notas (mostrar solo lo que está en el curso)
         Runnable refrescarLista = () -> {
             listaPanel.removeAll();
-            System.out.println("rNotas: " + curso.getrNotas());
-            System.out.println(
-                    "Calificaciones: " + (curso.getrNotas() != null ? curso.getrNotas().getCalificaciones() : "null"));
-            System.out.println("Tamaño calificaciones: " +
-                    (curso.getrNotas() != null && curso.getrNotas().getCalificaciones() != null
-                            ? curso.getrNotas().getCalificaciones().size()
-                            : 0));
-            System.out.println("Estudiantes: " + curso.getEstudiantes());
-            System.out.println("Tamaño estudiantes: " +
-                    (curso.getEstudiantes() != null ? curso.getEstudiantes().size() : 0));
-
-            // Validar que existan notas registradas
-            if (curso.getrNotas() != null &&
-                    curso.getrNotas().getCalificaciones() != null &&
-                    !curso.getrNotas().getCalificaciones().isEmpty() &&
-                    aulaVirtual.getEstudiantesRegistrados() != null &&
-                    !aulaVirtual.getEstudiantesRegistrados().isEmpty()) {
-
+            if (aulaVirtual.getEstudiantesRegistrados() != null && !aulaVirtual.getEstudiantesRegistrados().isEmpty()) {
                 int contador = 1;
-                List<Double> notas = curso.getrNotas().getCalificaciones();
-                List<Estudiante> estudiantes = aulaVirtual.getEstudiantesRegistrados();
+                for (Estudiante e : aulaVirtual.getEstudiantesRegistrados()) {
+                    RegistroNotas rNotas = e.getNotasEstudiante();
 
-                // Suponiendo que el número de notas coincide con el número de estudiantes
-                int total = Math.min(notas.size(), estudiantes.size());
+                    if (rNotas != null && rNotas.getCalificaciones() != null && !rNotas.getCalificaciones().isEmpty()) {
+                        for (Double n : rNotas.getCalificaciones()) {
+                            JPanel item = new JPanel(new BorderLayout());
+                            item.setBackground(new Color(74, 85, 110));
+                            item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-                for (int i = 0; i < total; i++) {
-                    Double n = notas.get(i);
-                    Estudiante est = estudiantes.get(i);
+                            JLabel lblNota = new JLabel(
+                                    "<html><b>" + e.getNombre() + " - Nota #" + contador + ":</b> " + n + "</html>");
+                            lblNota.setForeground(Color.WHITE);
 
-                    JPanel item = new JPanel(new BorderLayout());
-                    item.setBackground(new Color(74, 85, 110));
-                    item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-
-                    JLabel lblNota = new JLabel(
-                            "<html><b>Estudiante:</b> " + est.getNombre() +
-                                    "<br><b>Nota #" + contador + ":</b> " + n + "</html>");
-                    lblNota.setForeground(Color.WHITE);
-
-                    item.add(lblNota, BorderLayout.CENTER);
-                    listaPanel.add(Box.createVerticalStrut(10));
-                    listaPanel.add(item);
-                    contador++;
+                            item.add(lblNota, BorderLayout.CENTER);
+                            listaPanel.add(Box.createVerticalStrut(10));
+                            listaPanel.add(item);
+                            contador++;
+                        }
+                    } else {
+                        JLabel lblSinNotas = new JLabel(e.getNombre() + " no tiene notas registradas.",
+                                SwingConstants.CENTER);
+                        lblSinNotas.setForeground(Color.LIGHT_GRAY);
+                        listaPanel.add(lblSinNotas);
+                    }
                 }
-
             } else {
-                JLabel lblVacio = new JLabel("No hay notas registradas.", SwingConstants.CENTER);
+                JLabel lblVacio = new JLabel("No hay estudiantes registrados.", SwingConstants.CENTER);
                 lblVacio.setForeground(Color.LIGHT_GRAY);
-                lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
                 listaPanel.add(lblVacio);
             }
 

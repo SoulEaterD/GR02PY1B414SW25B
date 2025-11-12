@@ -38,6 +38,7 @@ public class Curso {
         // Inicializa los registros si están vacíos
         if (rNotas == null) {
             rNotas = new RegistroNotas();
+            rNotas.setCalificaciones(new ArrayList<>());
         }
 
         if (estudiante.getNotasEstudiante() == null) {
