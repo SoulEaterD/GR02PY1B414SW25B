@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main extends JFrame {
 
@@ -8,15 +9,13 @@ public class Main extends JFrame {
     private JPanel contenedor;
 
     String usuario;
-
-    private Docente docente = new Docente("1","Pepito Candela", "docente@docente.com", "123");
+    private Docente docente = new Docente("1", "Pepito Candela", "docente@docente.com", "123");
     private Estudiante e1 = new Estudiante("1", "Juan Suarez", "juan@patito.com", "123");
-    private Estudiante e2 = new Estudiante("2", "Maria Suarez","maria@patito.com", "123");
-
+    private Estudiante e2 = new Estudiante("2", "Maria Suarez", "maria@patito.com", "123");
+    private Estudiante usuarioEstudiante;
     private AulaVirtual aulaVirtual = new AulaVirtual(docente);
 
     public Main() {
-
         super("Aula Virtual");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -129,6 +128,12 @@ public class Main extends JFrame {
 
             if (!encontrado) {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            } else {
+                for (Estudiante est : aulaVirtual.estudiantesRegistrados) {
+                    if (est.getCorreo().equals(usuario)) {
+                        setUsuarioEstudiante(est);
+                    }
+                }
             }
         });
 
@@ -234,6 +239,7 @@ public class Main extends JFrame {
         btnCerrarSesion.setFocusPainted(false);
         btnCerrarSesion.addActionListener(e -> {
             layout.show(contenedor, "login");
+            setUsuarioEstudiante(null);
         });
 
         JPanel contBotones = new JPanel();
@@ -304,13 +310,13 @@ public class Main extends JFrame {
 
             btn.addActionListener(ev -> {
                 if (opcion.equals("Materiales")) {
-                    mostrarPanelMateriales(curso);
+                    mostrarPanelMateriales(curso, true);
                     System.out.println("Mostrando panel de materiales");
                 } else if (opcion.equals("Tareas")) {
-                    mostrarPanelTareas(curso);
+                    mostrarPanelTareas(curso, true);
                     System.out.println("Mostrando panel de tareas");
                 } else if (opcion.equals("Registro de Notas")) {
-                    mostrarPanelNotas(curso);
+                    mostrarPanelNotas(curso, true);
                 }
             });
 
@@ -338,7 +344,7 @@ public class Main extends JFrame {
     }
 
     // PANEL DE MATERIALES
-    private void mostrarPanelMateriales(Curso curso) {
+    private void mostrarPanelMateriales(Curso curso, boolean esDocente) {
 
         JPanel panelMateriales = new JPanel(new BorderLayout());
         panelMateriales.setBackground(new Color(45, 55, 72));
@@ -396,7 +402,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (usuario.equals(docente.getCorreo())) {
+        if (esDocente) {
             JButton btnAgregar = new JButton("Crear material");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);
@@ -426,8 +432,7 @@ public class Main extends JFrame {
         layout.show(contenedor, "materiales_" + curso.getIdCurso());
     }
 
-
-    private void mostrarPanelTareas(Curso curso) {
+    private void mostrarPanelTareas(Curso curso, boolean esDocente) {
         JPanel panelTareas = new JPanel(new BorderLayout());
         panelTareas.setBackground(new Color(45, 55, 72));
 
@@ -446,7 +451,7 @@ public class Main extends JFrame {
         scroll.getViewport().setBackground(new Color(45, 55, 72));
         panelTareas.add(scroll, BorderLayout.CENTER);
 
-        // FUNCION PARA REFRESCAR LA LISTA DE TAREAS
+        // ---- FUNCIÓN PARA REFRESCAR LA LISTA DE TAREAS ----
         Runnable refrescarListaT = () -> {
             listaPanelT.removeAll();
             if (curso.getTareas() != null && !curso.getTareas().isEmpty()) {
@@ -459,44 +464,47 @@ public class Main extends JFrame {
                     lblTareas.setForeground(Color.WHITE);
                     item.add(lblTareas, BorderLayout.CENTER);
 
-                    JButton btnAccion = new JButton(usuario.equals(docente.getCorreo()) ? "Calificar" : "Ver tarea");
+                    JButton btnAccion = new JButton(esDocente ? "Calificar" : "Ver tarea");
                     btnAccion.setBackground(new Color(96, 107, 134));
                     btnAccion.setForeground(Color.WHITE);
                     btnAccion.setFont(new Font("Segoe UI", Font.BOLD, 13));
                     btnAccion.setFocusPainted(false);
 
-                    // Asocia la tarea a su boton
+                    // 🔹 Asocia la tarea a su botón
                     btnAccion.putClientProperty("tarea", t);
 
-                    // Accion del boton
+                    // 🔹 Acción del botón
                     btnAccion.addActionListener(e -> {
                         Tarea tareaSeleccionada = (Tarea) ((JButton) e.getSource()).getClientProperty("tarea");
                         if (usuario.equals(docente.getCorreo())) {
                             // Pide calificación
-                            String input = JOptionPane.showInputDialog(
-                                    panelTareas,
-                                    "Ingrese la calificación para " + tareaSeleccionada.getTitulo() + ":",
-                                    "Calificar tarea",
-                                    JOptionPane.QUESTION_MESSAGE);
+                            for (int i = 0; i < aulaVirtual.getEstudiantesRegistrados().size(); i++) {
+                                String input = JOptionPane.showInputDialog(
+                                        panelTareas,
+                                        "Ingrese la calificación para "
+                                                + aulaVirtual.getEstudiantesRegistrados().get(i).getNombre() + ":",
+                                        "Calificar tarea",
+                                        JOptionPane.QUESTION_MESSAGE);
 
-                            try {
-                                if (curso.getrNotas() == null) {
-                                    curso.setrNotas(new RegistroNotas());
-                                    curso.getrNotas().setCalificaciones(new ArrayList<>());
+                                try {
+                                    if (curso.getrNotas() == null) {
+                                        curso.setrNotas(new RegistroNotas());
+                                        curso.getrNotas().setCalificaciones(new ArrayList<>());
+                                    }
+                                    double nota = Double.parseDouble(input);
+                                    curso.calificarTarea(tareaSeleccionada,
+                                            aulaVirtual.getEstudiantesRegistrados().get(i), nota);
+                                    JOptionPane.showMessageDialog(panelTareas,
+                                            "Tarea calificada con éxito.\nNota: " + nota,
+                                            "Calificación registrada",
+                                            JOptionPane.INFORMATION_MESSAGE);
+                                } catch (NumberFormatException ex) {
+                                    JOptionPane.showMessageDialog(panelTareas,
+                                            "Por favor, ingrese un número válido.",
+                                            "Error de formato",
+                                            JOptionPane.ERROR_MESSAGE);
                                 }
-                                double nota = Double.parseDouble(input);
-                                curso.calificarTarea(tareaSeleccionada, nota);
-                                JOptionPane.showMessageDialog(panelTareas,
-                                        "Tarea calificada con éxito.\nNota: " + nota,
-                                        "Calificación registrada",
-                                        JOptionPane.INFORMATION_MESSAGE);
-                            } catch (NumberFormatException ex) {
-                                JOptionPane.showMessageDialog(panelTareas,
-                                        "Por favor, ingrese un número válido.",
-                                        "Error de formato",
-                                        JOptionPane.ERROR_MESSAGE);
                             }
-
                         } else {
                             // Si es estudiante, solo mostrar información
                             JOptionPane.showMessageDialog(panelTareas,
@@ -527,7 +535,7 @@ public class Main extends JFrame {
 
         refrescarListaT.run();
 
-        // BOTONES INFERIORES
+        // ---- BOTONES INFERIORES ----
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         panelBotones.setBackground(new Color(45, 55, 72));
 
@@ -539,7 +547,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (usuario.equals(docente.getCorreo())) {
+        if (esDocente) {
             JButton btnAgregar = new JButton("Mandar Tarea");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);
@@ -567,12 +575,12 @@ public class Main extends JFrame {
     }
 
     // PANEL NOTAS
-    private void mostrarPanelNotas(Curso curso) {
+    private void mostrarPanelNotas(Curso curso, boolean esDocente) {
 
         JPanel panelNotas = new JPanel(new BorderLayout());
         panelNotas.setBackground(new Color(45, 55, 72));
 
-        // Titulo principal
+        // Título principal
         JLabel lblTitulo = new JLabel("Registro de notas - " + curso.getNombreCurso(), SwingConstants.CENTER);
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitulo.setForeground(Color.WHITE);
@@ -589,24 +597,45 @@ public class Main extends JFrame {
         scroll.getViewport().setBackground(new Color(45, 55, 72));
         panelNotas.add(scroll, BorderLayout.CENTER);
 
-        // Refrescar lista de notas (mostrar solo lo que esta en el curso)
+        // Refrescar lista de notas (mostrar solo lo que está en el curso)
         Runnable refrescarLista = () -> {
             listaPanel.removeAll();
+            System.out.println("rNotas: " + curso.getrNotas());
+            System.out.println(
+                    "Calificaciones: " + (curso.getrNotas() != null ? curso.getrNotas().getCalificaciones() : "null"));
+            System.out.println("Tamaño calificaciones: " +
+                    (curso.getrNotas() != null && curso.getrNotas().getCalificaciones() != null
+                            ? curso.getrNotas().getCalificaciones().size()
+                            : 0));
+            System.out.println("Estudiantes: " + curso.getEstudiantes());
+            System.out.println("Tamaño estudiantes: " +
+                    (curso.getEstudiantes() != null ? curso.getEstudiantes().size() : 0));
 
             // Validar que existan notas registradas
             if (curso.getrNotas() != null &&
-                curso.getrNotas().getCalificaciones() != null &&
-                !curso.getrNotas().getCalificaciones().isEmpty()) {
+                    curso.getrNotas().getCalificaciones() != null &&
+                    !curso.getrNotas().getCalificaciones().isEmpty() &&
+                    aulaVirtual.getEstudiantesRegistrados() != null &&
+                    !aulaVirtual.getEstudiantesRegistrados().isEmpty()) {
 
                 int contador = 1;
-                for (Double n : curso.getrNotas().getCalificaciones()) {
+                List<Double> notas = curso.getrNotas().getCalificaciones();
+                List<Estudiante> estudiantes = aulaVirtual.getEstudiantesRegistrados();
+
+                // Suponiendo que el número de notas coincide con el número de estudiantes
+                int total = Math.min(notas.size(), estudiantes.size());
+
+                for (int i = 0; i < total; i++) {
+                    Double n = notas.get(i);
+                    Estudiante est = estudiantes.get(i);
+
                     JPanel item = new JPanel(new BorderLayout());
                     item.setBackground(new Color(74, 85, 110));
                     item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
                     JLabel lblNota = new JLabel(
-                            "<html><b>Nota #" + contador + ":</b> " + n + "</html>"
-                    );
+                            "<html><b>Estudiante:</b> " + est.getNombre() +
+                                    "<br><b>Nota #" + contador + ":</b> " + n + "</html>");
                     lblNota.setForeground(Color.WHITE);
 
                     item.add(lblNota, BorderLayout.CENTER);
@@ -614,6 +643,7 @@ public class Main extends JFrame {
                     listaPanel.add(item);
                     contador++;
                 }
+
             } else {
                 JLabel lblVacio = new JLabel("No hay notas registradas.", SwingConstants.CENTER);
                 lblVacio.setForeground(Color.LIGHT_GRAY);
@@ -627,7 +657,7 @@ public class Main extends JFrame {
 
         refrescarLista.run();
 
-        // Panel inferior con boton Volver
+        // Panel inferior con botón Volver
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         panelBotones.setBackground(new Color(45, 55, 72));
 
@@ -648,4 +678,13 @@ public class Main extends JFrame {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);
     }
+
+    public Estudiante getUsuarioEstudiante() {
+        return usuarioEstudiante;
+    }
+
+    public void setUsuarioEstudiante(Estudiante usuarioEstudiante) {
+        this.usuarioEstudiante = usuarioEstudiante;
+    }
+
 }
