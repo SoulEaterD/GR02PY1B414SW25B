@@ -32,8 +32,7 @@ public class Curso {
         return tareas;
     }
 
-    public void calificarTarea(Estudiante estudiante,Tarea tarea, Double calificacion) {
-        estudiante.getNotasEstudiante().getCalificaciones().add(calificacion);
+    public void calificarTarea(Tarea tarea, Double calificacion) {
         tarea.setCalificacion(calificacion);
         rNotas.getCalificaciones().add(calificacion);
     }
