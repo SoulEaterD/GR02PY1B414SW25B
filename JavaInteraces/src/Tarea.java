@@ -1,4 +1,5 @@
 public class Tarea {
+    
     private String titulo;
     private String descripcion;
     private Double calificacion;

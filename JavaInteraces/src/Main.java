@@ -12,7 +12,7 @@ public class Main extends JFrame {
     private Docente docente = new Docente("1","Pepito Candela", "docente@docente.com", "123");
     private Estudiante e1 = new Estudiante("1", "Juan Suarez", "juan@patito.com", "123");
     private Estudiante e2 = new Estudiante("2", "Maria Suarez","maria@patito.com", "123");
-    private Estudiante usuarioEstudiante;
+
     private AulaVirtual aulaVirtual = new AulaVirtual(docente);
 
     public Main() {
@@ -129,12 +129,6 @@ public class Main extends JFrame {
 
             if (!encontrado) {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-            } else {
-                for (Estudiante est : aulaVirtual.estudiantesRegistrados) {
-                    if (est.getCorreo().equals(usuario)) {
-                        usuarioEstudiante = est;
-                    }
-                }
             }
         });
 
@@ -240,7 +234,6 @@ public class Main extends JFrame {
         btnCerrarSesion.setFocusPainted(false);
         btnCerrarSesion.addActionListener(e -> {
             layout.show(contenedor, "login");
-            usuarioEstudiante = null;
         });
 
         JPanel contBotones = new JPanel();
@@ -311,13 +304,13 @@ public class Main extends JFrame {
 
             btn.addActionListener(ev -> {
                 if (opcion.equals("Materiales")) {
-                    mostrarPanelMateriales(curso, true);
+                    mostrarPanelMateriales(curso);
                     System.out.println("Mostrando panel de materiales");
                 } else if (opcion.equals("Tareas")) {
-                    mostrarPanelTareas(curso, true);
+                    mostrarPanelTareas(curso);
                     System.out.println("Mostrando panel de tareas");
                 } else if (opcion.equals("Registro de Notas")) {
-                    mostrarPanelNotas(curso, true);
+                    mostrarPanelNotas(curso);
                 }
             });
 
@@ -345,7 +338,7 @@ public class Main extends JFrame {
     }
 
     // PANEL DE MATERIALES
-    private void mostrarPanelMateriales(Curso curso, boolean esDocente) {
+    private void mostrarPanelMateriales(Curso curso) {
 
         JPanel panelMateriales = new JPanel(new BorderLayout());
         panelMateriales.setBackground(new Color(45, 55, 72));
@@ -403,7 +396,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (esDocente) {
+        if (usuario.equals(docente.getCorreo())) {
             JButton btnAgregar = new JButton("Crear material");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);
@@ -434,7 +427,7 @@ public class Main extends JFrame {
     }
 
 
-    private void mostrarPanelTareas(Curso curso, boolean esDocente) {
+    private void mostrarPanelTareas(Curso curso) {
         JPanel panelTareas = new JPanel(new BorderLayout());
         panelTareas.setBackground(new Color(45, 55, 72));
 
@@ -453,7 +446,7 @@ public class Main extends JFrame {
         scroll.getViewport().setBackground(new Color(45, 55, 72));
         panelTareas.add(scroll, BorderLayout.CENTER);
 
-        // ---- FUNCIÓN PARA REFRESCAR LA LISTA DE TAREAS ----
+        // FUNCION PARA REFRESCAR LA LISTA DE TAREAS
         Runnable refrescarListaT = () -> {
             listaPanelT.removeAll();
             if (curso.getTareas() != null && !curso.getTareas().isEmpty()) {
@@ -466,19 +459,19 @@ public class Main extends JFrame {
                     lblTareas.setForeground(Color.WHITE);
                     item.add(lblTareas, BorderLayout.CENTER);
 
-                    JButton btnAccion = new JButton(esDocente ? "Calificar" : "Ver tarea");
+                    JButton btnAccion = new JButton(usuario.equals(docente.getCorreo()) ? "Calificar" : "Ver tarea");
                     btnAccion.setBackground(new Color(96, 107, 134));
                     btnAccion.setForeground(Color.WHITE);
                     btnAccion.setFont(new Font("Segoe UI", Font.BOLD, 13));
                     btnAccion.setFocusPainted(false);
 
-                    // 🔹 Asocia la tarea a su botón
+                    // Asocia la tarea a su boton
                     btnAccion.putClientProperty("tarea", t);
 
-                    // 🔹 Acción del botón
+                    // Accion del boton
                     btnAccion.addActionListener(e -> {
                         Tarea tareaSeleccionada = (Tarea) ((JButton) e.getSource()).getClientProperty("tarea");
-                        if (esDocente) {
+                        if (usuario.equals(docente.getCorreo())) {
                             // Pide calificación
                             String input = JOptionPane.showInputDialog(
                                     panelTareas,
@@ -534,7 +527,7 @@ public class Main extends JFrame {
 
         refrescarListaT.run();
 
-        // ---- BOTONES INFERIORES ----
+        // BOTONES INFERIORES
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
         panelBotones.setBackground(new Color(45, 55, 72));
 
@@ -546,7 +539,7 @@ public class Main extends JFrame {
         btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
         panelBotones.add(btnVolver);
 
-        if (esDocente) {
+        if (usuario.equals(docente.getCorreo())) {
             JButton btnAgregar = new JButton("Mandar Tarea");
             btnAgregar.setBackground(new Color(96, 107, 134));
             btnAgregar.setForeground(Color.WHITE);
@@ -572,84 +565,85 @@ public class Main extends JFrame {
         contenedor.add(panelTareas, "tareas_" + curso.getIdCurso());
         layout.show(contenedor, "tareas_" + curso.getIdCurso());
     }
-// PANEL NOTAS
-private void mostrarPanelNotas(Curso curso, boolean esDocente) {
 
-    JPanel panelNotas = new JPanel(new BorderLayout());
-    panelNotas.setBackground(new Color(45, 55, 72));
+    // PANEL NOTAS
+    private void mostrarPanelNotas(Curso curso) {
 
-    // Título principal
-    JLabel lblTitulo = new JLabel("Registro de notas - " + curso.getNombreCurso(), SwingConstants.CENTER);
-    lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
-    lblTitulo.setForeground(Color.WHITE);
-    lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-    panelNotas.add(lblTitulo, BorderLayout.NORTH);
+        JPanel panelNotas = new JPanel(new BorderLayout());
+        panelNotas.setBackground(new Color(45, 55, 72));
 
-    // Panel donde se mostrarán las notas
-    JPanel listaPanel = new JPanel();
-    listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
-    listaPanel.setBackground(new Color(45, 55, 72));
+        // Titulo principal
+        JLabel lblTitulo = new JLabel("Registro de notas - " + curso.getNombreCurso(), SwingConstants.CENTER);
+        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
+        panelNotas.add(lblTitulo, BorderLayout.NORTH);
 
-    JScrollPane scroll = new JScrollPane(listaPanel);
-    scroll.setBorder(null);
-    scroll.getViewport().setBackground(new Color(45, 55, 72));
-    panelNotas.add(scroll, BorderLayout.CENTER);
+        // Panel donde se mostrarán las notas
+        JPanel listaPanel = new JPanel();
+        listaPanel.setLayout(new BoxLayout(listaPanel, BoxLayout.Y_AXIS));
+        listaPanel.setBackground(new Color(45, 55, 72));
 
-    // Refrescar lista de notas (mostrar solo lo que está en el curso)
-    Runnable refrescarLista = () -> {
-        listaPanel.removeAll();
+        JScrollPane scroll = new JScrollPane(listaPanel);
+        scroll.setBorder(null);
+        scroll.getViewport().setBackground(new Color(45, 55, 72));
+        panelNotas.add(scroll, BorderLayout.CENTER);
 
-        // Validar que existan notas registradas
-        if (curso.getrNotas() != null &&
-            curso.getrNotas().getCalificaciones() != null &&
-            !curso.getrNotas().getCalificaciones().isEmpty()) {
+        // Refrescar lista de notas (mostrar solo lo que esta en el curso)
+        Runnable refrescarLista = () -> {
+            listaPanel.removeAll();
 
-            int contador = 1;
-            for (Double n : curso.getrNotas().getCalificaciones()) {
-                JPanel item = new JPanel(new BorderLayout());
-                item.setBackground(new Color(74, 85, 110));
-                item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+            // Validar que existan notas registradas
+            if (curso.getrNotas() != null &&
+                curso.getrNotas().getCalificaciones() != null &&
+                !curso.getrNotas().getCalificaciones().isEmpty()) {
 
-                JLabel lblNota = new JLabel(
-                        "<html><b>Nota #" + contador + ":</b> " + n + "</html>"
-                );
-                lblNota.setForeground(Color.WHITE);
+                int contador = 1;
+                for (Double n : curso.getrNotas().getCalificaciones()) {
+                    JPanel item = new JPanel(new BorderLayout());
+                    item.setBackground(new Color(74, 85, 110));
+                    item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
 
-                item.add(lblNota, BorderLayout.CENTER);
-                listaPanel.add(Box.createVerticalStrut(10));
-                listaPanel.add(item);
-                contador++;
+                    JLabel lblNota = new JLabel(
+                            "<html><b>Nota #" + contador + ":</b> " + n + "</html>"
+                    );
+                    lblNota.setForeground(Color.WHITE);
+
+                    item.add(lblNota, BorderLayout.CENTER);
+                    listaPanel.add(Box.createVerticalStrut(10));
+                    listaPanel.add(item);
+                    contador++;
+                }
+            } else {
+                JLabel lblVacio = new JLabel("No hay notas registradas.", SwingConstants.CENTER);
+                lblVacio.setForeground(Color.LIGHT_GRAY);
+                lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+                listaPanel.add(lblVacio);
             }
-        } else {
-            JLabel lblVacio = new JLabel("No hay notas registradas.", SwingConstants.CENTER);
-            lblVacio.setForeground(Color.LIGHT_GRAY);
-            lblVacio.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            listaPanel.add(lblVacio);
-        }
 
-        listaPanel.revalidate();
-        listaPanel.repaint();
-    };
+            listaPanel.revalidate();
+            listaPanel.repaint();
+        };
 
-    refrescarLista.run();
+        refrescarLista.run();
 
-    // Panel inferior con botón Volver
-    JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
-    panelBotones.setBackground(new Color(45, 55, 72));
+        // Panel inferior con boton Volver
+        JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
+        panelBotones.setBackground(new Color(45, 55, 72));
 
-    JButton btnVolver = new JButton("Volver");
-    btnVolver.setBackground(new Color(237, 87, 97));
-    btnVolver.setForeground(Color.WHITE);
-    btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
-    btnVolver.setFocusPainted(false);
-    btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
-    panelBotones.add(btnVolver);
+        JButton btnVolver = new JButton("Volver");
+        btnVolver.setBackground(new Color(237, 87, 97));
+        btnVolver.setForeground(Color.WHITE);
+        btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnVolver.setFocusPainted(false);
+        btnVolver.addActionListener(e -> layout.show(contenedor, "paginaCurso_" + curso.getIdCurso()));
+        panelBotones.add(btnVolver);
 
-    panelNotas.add(panelBotones, BorderLayout.SOUTH);
+        panelNotas.add(panelBotones, BorderLayout.SOUTH);
 
-    contenedor.add(panelNotas, "notas_" + curso.getIdCurso());
-    layout.show(contenedor, "notas_" + curso.getIdCurso());
-}
+        contenedor.add(panelNotas, "notas_" + curso.getIdCurso());
+        layout.show(contenedor, "notas_" + curso.getIdCurso());
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::new);

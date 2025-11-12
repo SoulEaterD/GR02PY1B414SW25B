@@ -12,17 +12,6 @@ public class Curso {
     private List<Tarea> tareas;
     private RegistroNotas rNotas;
 
-    public Tarea obtenerTareaPorTitulo(String titulo) {
-        if (tareas == null)
-            return null;
-        for (Tarea t : tareas) {
-            if (t.getTitulo().equalsIgnoreCase(titulo)) {
-                return t;
-            }
-        }
-        return null;
-    }
-
     public List<Tarea> crearTarea(String titulo, String descripcion) {
         Tarea tarea = new Tarea(titulo, descripcion);
         tareas.add(tarea);
@@ -41,20 +30,6 @@ public class Curso {
         Material mat = new Material(id, titulo, tipo, url);
         material.add(mat);
         return mat;
-    }
-
-    public void solicitarInscripcion(Estudiante estudiante) {
-        estudiantes.add(estudiante);
-        estudiante.guardarCurso(this);
-    }
-
-    public void mostrarMaterial() {
-        for (Material mat : material) {
-            System.out.println("ID Material: " + mat.getIdMaterial());
-            System.out.println("Título: " + mat.getTitulo());
-            System.out.println("Contenido: " + mat.getTipo());
-            System.out.println("Enlace: " + mat.getUrl());
-        }
     }
 
     public Curso(int idCurso, String nombreCurso, String descripcionCurso, Docente docente) {
