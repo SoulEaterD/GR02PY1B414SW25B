@@ -13,6 +13,7 @@ public class Usuario {
         this.contrasenia = contrasenia;
         this.permisos = permisos;
     }
+
     public String getId() {
         return id;
     }
@@ -50,6 +51,5 @@ public class Usuario {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    
     
 }

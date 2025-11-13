@@ -3,7 +3,6 @@ import java.util.List;
 
 public class RegistroNotas {
 
-    // confuso (cambiar) hay que pensarle mas
     private List<Double> calificaciones;
 
     public void agregarCalificacion(Double calificacion) {
