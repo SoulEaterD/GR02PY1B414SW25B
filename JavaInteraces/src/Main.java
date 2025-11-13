@@ -499,7 +499,7 @@ public class Main extends JFrame {
                                     "Título: " + tareaSeleccionada.getTitulo() +
                                             "\nDescripción: " + tareaSeleccionada.getDescripcion() +
                                             (tareaSeleccionada.getCalificacion() != null
-                                                    ? "\nCalificación: " + tareaSeleccionada.getCalificacion()
+                                                    ? "\nCalificada"
                                                     : "\nSin calificar aún."),
                                     "Detalles de la tarea",
                                     JOptionPane.INFORMATION_MESSAGE);
